@@ -1,0 +1,66 @@
+<br><br><br><br>
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <h2 class="ui teal image header">
+            <img src="assets/psl_logo.jpg" class="image">
+            <br>
+            <div class="content" style="color:#3b5998">
+                Create Account
+            </div>
+        </h2>
+        <form  [formGroup]="myForm" (ngSubmit)="onSubmit(myForm.value)" class="ui large form" >
+            <div class="ui stacked segment">
+                <div class="field" [class.error]="!owner_name.valid">
+                    <input type="text" id="name" name="owner_name" placeholder="Owner Name" [formControl]="myForm.controls['owner_name']">
+                </div>
+                <div style="margin:1 1em 1 1em" *ngIf="!owner_name.valid && (password.dirty || password.touched)" class="ui red message">Name is required</div>
+                
+                <div class="field" [class.error]="!password.valid">
+                    <input type="password" name="password" placeholder="Password" [formControl]="myForm.controls['password']">   
+                </div>
+
+                <div style="margin:1 1em 1 1em" *ngIf="!password.valid && (password.dirty || password.touched)" class="ui red message">Password is required</div>
+
+                <div class="field" [class.error]="!email.valid">
+                    <input type="email" name="email" placeholder="Email" [formControl]="myForm.controls['email']">
+                </div>
+                
+                <div style="margin:1 1em 1 1em" *ngIf="email.hasError('required') && (email.dirty || email.touched)" class="ui red message">Email is required</div>
+                <div style="margin:1 1em 1 1em" *ngIf="email.hasError('invalidemail')  && (email.dirty || email.touched)" class="ui red message">Email is invalid</div>
+                <div style="margin:1 1em 1 1em" *ngIf="email.hasError('duplicateEmail')  && (email.dirty || email.touched)" class="ui red message">Email Allready Exists</div>
+
+                <div class="field" [class.error]="!cnic.valid">
+                    <input type="text" name="cnic" placeholder="National Identity Card" [formControl]="myForm.controls['cnic']">
+                </div>
+
+                <div style="margin:1 1em 1 1em" *ngIf="cnic.hasError('required') && (cnic.dirty || cnic.touched)" class="ui red message">NIC is required</div>
+                <div style="margin:1 1em 1 1em" *ngIf="cnic.hasError('invalidNIC') && (cnic.dirty || cnic.touched)" class="ui red message">NIC is invalid, Format:21705-2309678-1</div>
+                <div class="field" [class.error]="!team_name.valid">
+                    <input type="text" name="team_name" placeholder="Team name" [formControl]="myForm.controls['team_name']">
+                </div>
+
+                <div style="margin:1 1em 1 1em" *ngIf="!team_name.valid && (team_name.dirty || team_name.touched)" class="ui red message">Team name is required</div>
+            </div>
+           
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <button type="submit" class="ui fluid large teal submit button" type="submit" [disabled]="!myForm.valid" style="background-color:#3b5998; margin-bottom: 0.4cm;">Sign Up</button>
+                    
+                </div>
+            </div>
+
+            <!-- These are two messages for successfull creation of user or error in process of registration. -->
+            <div class="ui green message" *ngIf="success_message" >
+                <div class="column" >
+                    <p>{{success_message | uppercase}}</p>
+                </div>
+            </div>
+            <div class="ui red message" *ngIf="err_message">
+                <div class="column" >
+                    <p>{{ err_message }}</p>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

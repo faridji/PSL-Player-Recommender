@@ -1,0 +1,114 @@
+<!-- Main Menu of the system -->
+<div class="ui fixed inverted pointing menu" style="background-color:#195D10">
+  <div class="item">
+    <img src="\assets\psl_logo.jpg" class="logo">Pakistan Super League
+  </div>
+      
+  <a  [routerLinkActive]="['active']" [routerLink]="['home']"  class="item" >
+      Home
+    </a>
+  <a  [routerLinkActive]="['active']" [routerLink]="['PSL_teams']" class="item">
+    PSL Teams
+  </a>
+  <a  [routerLinkActive]="['active']" [routerLink]="['dataset']" class="item" >
+      Dataset
+  </a>
+  <a  [routerLinkActive]="['active']" [routerLink]="['reports']" class="item">
+    Statistics
+  </a>
+  <a  [routerLinkActive]="['active']" [routerLink]="['aboutUs']" class="item">
+    About Us
+  </a>
+  <a  [routerLinkActive]="['error']" [routerLink]="['error']" class="item">
+      How PSL Works
+    </a>
+  <a [routerLinkActive]="['active']" [routerLink]="['Owner_profile']" class="item" *ngIf="getOwnerTokenData()">
+      Owner Profile
+  </a>
+  <div class="right menu">
+    <div class="item">
+
+      <!--Searching Player -->
+      <div class="ui icon input">
+        <input type="text" style="width:20em;" placeholder="Player Name" [value]="searchValue" #playerName>
+        <i class="search link icon" (click)="searchPlayer(playerName.value)" message = null></i>
+        <pre>&ensp;</pre>
+      </div>
+  
+      <!--Login -->
+      <a (click)="showDialog()" class="ui item" *ngIf="!getOwnerTokenData()">
+          Login
+      </a>
+      <app-model [(visible)]="dialogVisibility">
+          <app-login></app-login>
+      </app-model>
+      
+      <!-- Owner profile + logout option -->
+      <a class="circular ui icon button" *ngIf="getOwnerTokenData()" (click)="showProfileDialog = !showProfileDialog">
+          <i class="user icon"></i>
+      </a>
+      <app-profile-popup [(visible)]="showProfileDialog" >
+          <app-sign-out></app-sign-out>
+      </app-profile-popup>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- After routing the specified page will be opened here -->
+<router-outlet></router-outlet>
+
+
+
+<!-- This is the coder for footer -->
+<div class="ui inverted vertical footer segment" style="margin-top:20em">
+    <div class="ui center aligned container">
+      <div class="ui stackable inverted divided grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 1</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">PSL News</a>
+            <a [routerLink]="['howPSLWorks']" class="item">How Pakistan Super League works</a>
+            <a href="#" class="item">PSL Categories</a>
+            
+          </div>
+        </div>
+        
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 2</h4>
+          <div class="ui inverted link list">
+            <a [routerLink]="['PSL_teams']" class="item">PSL Teams</a>
+            <a [routerLink]="['dataset']" class="item">Datasets</a>
+            <a [routerLink]="['reports']" class="item">Statistics</a>
+            <a [routerLink]="['Owner_profile']" class="item">Owners Profile</a>
+            
+          </div>
+        </div>
+
+        <div class="three wide column">
+          <h4 class="ui inverted header">Group 3</h4>
+          <div class="ui inverted link list">
+            <a [routerLink]="['login']" class="item">Login</a>
+            <a [routerLink]="['signUp']" class="item">Sign Up</a>
+          </div>
+        </div>
+
+
+        <div class="seven wide column">
+          <h4 class="ui inverted header">Contact Information</h4>
+          <p>Email Address : farid.bsse2344@iiu.edu.pk or taimour.bsse2347iiu.edu.pk</p>
+          <p>Mobile Number : 03439295108</p>
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <img src="assets/images/logo.png" class="ui centered mini image">
+      <div class="ui horizontal inverted small divided link list">
+        <a class="item" href="#">Contact Us</a>
+        <a class="item" href="#">PSL Policy</a>
+      </div>
+      
+
+      
+      
+      

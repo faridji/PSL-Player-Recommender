@@ -1,0 +1,106 @@
+<!-- data in tabular form after successfully loading from db -->
+<div align="center">
+    <h1>Statistics of Pakistan Super League</h1>
+    <hr>
+</div>
+<div class="Row">
+  <div class="Column"> 
+      <h2 ui header>Top 20 Batsman</h2>
+      <table class="ui selectable inverted table">
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Runs</th>
+          </tr>
+          <tr *ngFor="let players of top20_Batsman; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{players.PLAYER}}</td>
+              <td>{{players.RUNS}}</td>
+          </tr>
+      </table>`
+  </div>
+  
+  <div class="Column">
+      <h2 ui header>Top 20 Wicket Takers</h2>
+      <table class="ui selectable inverted table">
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Wickets</th>
+          </tr>
+          <tr *ngFor="let players of top20_WicketTaker; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{players.PLAYER}}</td>
+              <td>{{players.WKTS}}</td>
+          </tr>
+      </table>`
+  </div>
+          
+  <div class="Column">
+      <h2 ui header>Top 20 Economical Players</h2>
+      <table class="ui selectable inverted table">
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Economy</th>
+          </tr>
+      
+          <tr *ngFor="let players of bestEconomy_players; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{players.PLAYER}}</td>
+              <td>{{players.ECON}}</td>
+          </tr>
+      </table>`
+  </div>
+</div>
+<!-- Three more tables -->
+<div class="Row">
+  <div class="Column"> 
+      <h2 ui header>Top 20 Strike raters</h2>
+      <table class="ui selectable inverted table">
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Strike Rate</th>
+          </tr>
+          <tr *ngFor="let players of top20_StrikeRaters; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{players.PLAYER}}</td>
+              <td>{{players.SR}}</td>
+          </tr>
+      </table>`
+  </div>
+  
+  <div class="Column">
+    <h2 ui header>Top 20 most fifties</h2>
+    <table class="ui selectable inverted table">
+        <tr style="height:3em; background-color:green">
+            <th>#</th>
+            <th>Player</th>
+            <th>Fifties</th>
+        </tr>
+        <tr *ngFor="let players of top20_MostFifties; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{players.PLAYER}}</td>
+            <td>{{players['50']}}</td>
+        </tr>
+    </table>
+  </div>
+        
+<div class="Column">
+    <h2 ui header>Top 20 most sixes</h2>
+    <table class="ui selectable inverted table">
+        <tr style="height:3em; background-color:green">
+            <th>#</th>
+            <th>Player</th>
+            <th>Sixes</th>
+        </tr>
+    
+        <tr *ngFor="let players of top20_MostSixes; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{players.PLAYER}}</td>
+            <td>{{players['6S']}}</td>
+        </tr>
+    </table>
+  </div>
+</div>

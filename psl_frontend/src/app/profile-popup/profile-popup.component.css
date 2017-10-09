@@ -1,0 +1,32 @@
+
+.dialog {
+  z-index: 1000;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+  min-height: 200px;
+  width: 90%;
+  max-width: 520px;
+  background-color: white;
+  padding: 12px;
+  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
+}
+
+@media (min-width: 768px) {
+  .dialog {
+    top: 50px;
+  }
+}
+
+.dialog__close-btn {
+  border: 0;
+  background: none;
+  color: #2d2d2d;
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 1.2em;
+}

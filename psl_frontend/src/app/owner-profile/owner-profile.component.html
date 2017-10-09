@@ -1,0 +1,125 @@
+
+<body class="template">
+    <div class="ui grid">
+        <div class="row">
+            <div class="column" id="sidebar">
+                <input type="file" name="student_img" (change)="fileChange(input)" #input /> 
+                <div> <img class="ui small circular image" [attr.src]='file_srcs[0]' alt="" /></div>
+                <h4 style="margin-left:3em; color:black">{{selectedOwner.name}}</h4>
+                <div class="ui secondary vertical fluid menu">
+                    <a personalInfo class="item" (click)="personal_Info($event)">Personal Information</a>
+                    <a best20Tabl class="item" (click)="best_20($event)"> Best 20</a>
+                    <a best11Tab class="item" (click)="best_11($event)">Best 11</a>
+                    <a class="item" (click)="signOut()">Sign Out</a>
+                <div class="ui hidden divider"></div>
+            </div>
+        </div>
+        
+        <div class="column" id="content">
+            <div class="ui grid">
+                <div class="row">
+                    <br><br><br><br>
+                    <h1 class="ui huge header">
+                        {{mainHeading}}
+                    </h1>
+                </div>
+                <div class="ui divider"></div>
+                <div class="one column left aligned row" *ngIf="p_info">
+
+                    <!-- Owner Personal Information -->
+                    <div class="column">
+                        <!-- Edit options for the owner personal Information -->
+                    
+                        <form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="ui large form" style="margin-left:5em">
+                            <div class="ui stacked segment">
+                                
+                                <div class="field">
+                                    <label >Owner Name</label>
+                                    <input type="text" name="owner_name" [(ngModel)]="selectedOwner.name">
+                                </div>
+                                
+                                <div class="field">
+                                    <label>Password</label>
+                                    <input type="password" name="password" [(ngModel)]="selectedOwner.password">   
+                                </div>
+                    
+                                <div class="field">
+                                    <label>Email</label>
+                                    <input type="email" name="email" [(ngModel)]="selectedOwner.email">
+                                </div>
+                    
+                                <div class="field">
+                                    <label>National Identity Card</label>
+                                    <input type="text" name="cnic"  [(ngModel)]="selectedOwner.cnic">
+                                </div>
+                
+                                <div class="field">
+                                    <label>Team Name</label>
+                                    <input type="text" name="team_name" [(ngModel)]="selectedOwner.teamName">
+                                </div>
+                            </div>
+                        
+                                
+                            <div class="column">
+                                <button type="submit" class="ui primary button" type="submit" style="margin-bottom: 0.4cm;">Save Changes</button>
+                                <button type="submit" class="ui button" type="submit" id="cancel_Button">Cancel</button>
+                            </div>
+                                
+                        
+                            <!-- These are two messages for successfull creation of user or error in process of registration. -->
+                            <div class="ui middle aligned center aligned grid" *ngIf="success_message" style="color:green">
+                                <div class="column" >
+                                    <p>{{success_message | uppercase}}</p>
+                                </div>
+                            </div>
+                            <div class="ui middle aligned center aligned grid" *ngIf="err_message" style="color:red">
+                                <div class="column" >
+                                    <p>{{ err_message }}</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div> 
+                </div>
+                <div class="ui divider"></div>
+                <div class="one column left aligned row" *ngIf="best20">
+                    <!-- Edit options for Owner Best 20 players -->
+                    <table class="ui selectable inverted table" style="margin-left:5em">
+                        <tr style="height:3em; background-color:green">
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Player Type</th>
+                            <th>Picked Category</th>
+                        </tr>
+                        <tr *ngFor="let players of best20_player; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{players.Player}}</td>
+                            <td>{{players['Player Type']}}</td>
+                            <td>{{players.Category}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="ui divider"></div>
+                <div class="one column left aligned row" *ngIf="best11">
+                    <!-- Edit options for Owner Best 20 players -->
+                    <table class="ui selectable inverted table" style="margin-left:5em">
+                        <tr style="height:3em; background-color:green">
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Player Type</th>
+                            <th>Picked Category</th>
+                        </tr>
+                        <tr *ngFor="let players of best11_player; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{players.Player}}</td>
+                            <td>{{players['Player Type']}}</td>
+                            <td>{{players.Category}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+

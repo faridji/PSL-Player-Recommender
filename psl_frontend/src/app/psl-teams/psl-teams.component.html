@@ -1,0 +1,205 @@
+
+<br><br><br><br><br>
+<div align="center" *ngIf="!players">
+  <h1>PSL Teams</h1>
+  <hr>
+
+  <div style="margin:1em 1em 1em 5em" *ngIf="!teamName">
+    <div class="ui cards">
+      <!-- Peshawar Zalmi team Card -->
+      <div class="card">
+        <a class="image" href="#">
+          <img src="/assets/peshawar_zalmi.png" (click)="peshawarZalmiTeam()">
+        </a>
+        <div class="content">
+          <div class="ui bottom attached button" (click)="peshawarZalmiTeam()" id="buttonBackground">
+              PESHAWAR ZALMI
+          </div>
+        </div>
+      </div>
+      <!-- Karachi Kings team Card -->
+      <div class="card">
+        <a class="image" href="#">
+          <img src="/assets/karachi_kings.png" (click)="karachiKingsTeam()">
+        </a>
+        <div class="content">
+          <div class="ui bottom attached button" (click)="karachiKingsTeam()" id="buttonBackground">
+              KARACHI KINGS
+          </div>
+        </div>
+      </div>
+  
+      <!-- Lahore Qalandars team Card -->
+      <div class="card">
+        <a class="image" href="#">
+          <img src="/assets/lahore_qalandars.png" (click)="lahoreQalandarsTeam()">
+        </a>
+        <div class="content">
+          <div class="ui bottom attached button" (click)="lahoreQalandarsTeam()" id="buttonBackground">
+              LAHORE QALANDARS
+          </div>
+        </div>
+      </div>
+  
+      <!-- Quetta Gladiators team Card -->
+      <div class="card">
+        <a class="image" href="#">
+          <img src="/assets/quetta_gladiators.png" (click)="quetaGladiatorsTeam()">
+        </a>
+        <div class="content">
+          <div class="ui bottom attached button" (click)="quetaGladiatorsTeam()" id="buttonBackground">
+              QUETTA GLADIATORS
+          </div>
+        </div>
+      </div>
+  
+      <!-- Islamabad United team Card -->
+      <div class="card">
+        <a class="image" href="#">
+          <img src="/assets/islamabad_united.png" (click)="islamabadUnitedTeam()">
+        </a>
+        <div class="content">
+          <div class="ui bottom attached button" (click)="islamabadUnitedTeam()" id="buttonBackground">
+              ISLAMABAD UNITED
+          </div>
+        </div>
+      </div>
+  
+      <!-- Multan Sultans team Card -->
+      <div class="card">
+          <a class="image" href="#">
+            <img src="/assets/multan_sultan.jpg" (click)="multanSultanTeam()">
+          </a>
+          <div class="content">
+            <div class="ui bottom attached button" (click)="multanSultanTeam()" id="buttonBackground">
+                MULTAN SULTANS
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="players">
+    <div class="ui grid">
+          
+        <div class="four wide column" style="margin-left:2em">
+            <h1 style="text-align:center">PSL Teams</h1>
+            <hr>
+            <div class="ui cards">
+                <!-- Peshawar Zalmi team Card -->
+                <div class="card">
+                  <a class="image" href="#">
+                    <img src="/assets/peshawar_zalmi.png">
+                  </a>
+                  <div class="content">
+                    <div class="ui bottom attached button" (click)="peshawarZalmiTeam()" id="buttonBackground">
+                        PESHAWAR ZALMI
+                    </div>
+                  </div>
+                </div>
+                <!-- Karachi Kings team Card -->
+                <div class="card">
+                  <a class="image" href="#">
+                    <img src="/assets/karachi_kings.png">
+                  </a>
+                  <div class="content">
+                    <div class="ui bottom attached button" (click)="karachiKingsTeam()" id="buttonBackground">
+                        KARACHI KINGS
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Lahore Qalandars team Card -->
+                <div class="card">
+                  <a class="image" href="#">
+                    <img src="/assets/lahore_qalandars.png">
+                  </a>
+                  <div class="content">
+                    <div class="ui bottom attached button" (click)="lahoreQalandarsTeam()" id="buttonBackground">
+                        LAHORE QALANDARS
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Quetta Gladiators team Card -->
+                <div class="card">
+                  <a class="image" href="#">
+                    <img src="/assets/quetta_gladiators.png" >
+                  </a>
+                  <div class="content">
+                    <div class="ui bottom attached button" (click)="quetaGladiatorsTeam()" id="buttonBackground">
+                        QUETTA GLADIATORS
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Islamabad United team Card -->
+                <div class="card">
+                  <a class="image" href="#">
+                    <img src="/assets/islamabad_united.png">
+                  </a>
+                  <div class="content">
+                    <div class="ui bottom attached button" (click)="islamabadUnitedTeam()" id="buttonBackground">
+                        ISLAMABAD UNITED
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Multan Sultans team Card -->
+                <div class="card">
+                    <a class="image" href="#">
+                      <img src="/assets/multan_sultan.jpg">
+                    </a>
+                    <div class="content">
+                      <div class="ui bottom attached button" (click)="multanSultanTeam()" id="buttonBackground">
+                          MULTAN SULTANS
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+        <div class="ten wide column" style="margin-left:2em">
+            <!-- Loading Icon -->
+            <div *ngIf="loading" id="loading" align:center>
+                <div class="ui segment" >
+                    <div class="ui active inverted dimmer">
+                        <div class="ui medium text loader">Loading Players</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!loading">
+              <h1 style="text-align:center">{{heading}}</h1>
+              <hr>
+            
+              <table class="ui selectable inverted table">
+                <tr style="height:3em; background-color:green">
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Country</th>
+                    <th>Batting Style</th>
+                    <th>Bowling Style</th>
+                    <th>Joined</th>
+                    <th>Info</th>
+                </tr>
+                <tr *ngFor="let player of players; let i = index" >
+                    <td>{{i + 1}}</td>
+                    <td>{{player.Name}}</td>
+                    <td>{{player.Country}}</td>
+                    <td>{{player['Batting Style']}}</td> 
+                    <td>{{player['Bowling Style']}}</td> 
+                    <td>{{player['Joined']}}</td>
+                    <td>{{player['Info']}}</td>         
+                </tr>
+              </table>
+            </div>
+            
+        </div>
+    </div>
+  
+</div>
+
+
+

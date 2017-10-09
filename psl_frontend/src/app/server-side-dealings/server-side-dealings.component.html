@@ -1,0 +1,463 @@
+
+<div class="ui grid">
+    <div class="three wide column" style="margin-left:1em; margin-top:10em">
+        
+        <!--Card No.1 for sign up and login -->
+        <div class="card" style="background-color: #F1F9FF;" *ngIf="!getTokenData()">
+            <div class="content" style="margin:0.5em">
+                <div class="header" id="heading">Owner Registration</div>
+                <hr> 
+            </div>
+            <div>   
+                <div class="ui bottom attached button" id="signUp" (click)="toggle_SignUpVisibility()">
+                    Sign Up       
+                </div>
+                <div *ngIf="signUp_Visibility">
+                    <app-model [(visible)]="dialogVisibility">
+                        <app-sign-up></app-sign-up>  
+                    </app-model>
+                </div>
+            </div>
+            
+            <br>
+            <div>
+                <div class="ui bottom attached button" id="login" (click)="toggle_LoginVisibility()">
+                    Log In
+                </div>
+                <div *ngIf="login_Visibility">
+                    <app-model [(visible)]="dialogVisibility">
+                        <app-login></app-login>
+                    </app-model>
+                </div>
+            </div> 
+        </div>
+        <br>
+            
+        <!--Card No.2 for PSL Teams -->
+        <div class="ui card" style="background-color: #F1F9FF;">
+            <div class="content">
+                <div class="header">Pakistan Super League</div>
+                <div class="meta">
+                <span class="category">PSL Teams</span>
+                </div>
+                <div >
+                    <ul>
+                        <img class="ui avatar image" src="/assets/peshawar_zalmi.png" style="cursor:pointer;" (click)="pslTeam('peshawar Zalmi')" > Peshawar Zalmi
+                        <img class="ui avatar image" src="/assets/quetta_gladiators.png" style="cursor:pointer;" (click)="pslTeam('queta Gladiators')"> Queta Gladiators
+                        <img class="ui avatar image" src="/assets/lahore_qalandars.png" style="cursor:pointer;" style="cursor:pointer;" (click)="pslTeam('lahore Qalandars')"> Lahore Qalandars
+                        <img class="ui avatar image" src="/assets/karachi_kings.png" style="cursor:pointer;" (click)="pslTeam('karachi Kings')"> karachi kings
+                        <br>
+                        <img class="ui avatar image" src="/assets/multan_sultan.jpg" style="cursor:pointer;" (click)="pslTeam('multan Sultan')"> Multan Sultans
+                        <br>
+                        <img class="ui avatar image" src="/assets/islamabad_united.png" style="cursor:pointer;" (click)="pslTeam('islamabad United')"> Islamabad United
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="eight wide column" style="margin-top:10em">
+        <!-- Buttons for loading Categories data from Database-->
+        
+        <div class="ui five item pointing menu" style="background-color:#F1F9FF">
+            <a class="item" (click)="loadPlatinumCategory()">Platinum Players</a>
+            <a class="item" (click)="loadDiamondCategory()">Diamond Player</a>
+            <a class="item" (click)="loadGoldCategory()">Gold Players</a>
+            <a class="item" (click)="loadSilverCategory()">Silver Players</a>
+            <a class="item" (click)="loadEmergingCategory()">Emerging Players</a>
+        </div>
+
+        <!-- Loading Icon -->
+        <div *ngIf="loading" id="loadingIcon" align:center>
+            <div class="ui segment" >
+                <div class="ui active inverted dimmer">
+                    <div class="ui medium text loader">Loading Players</div>
+                </div>
+            </div>
+        </div>      
+        <br>
+
+        <div *ngIf="players.length > 0">
+
+            <h1>{{categoryHeading}}</h1>
+            <hr>
+
+            <table class="ui selectable inverted table">
+                <tr style="height:3em; background-color:#195D10">
+                    <th>#</th>
+                    <th class="ribben label">Player</th>
+                    <th>Country</th>
+                    <th>Player Type</th>
+                </tr>
+                <tr *ngFor="let player of players | paginate: { itemsPerPage: 10, currentPage: p } let i = index" >
+                    <td>{{i + 1}}</td>
+                    <td>{{player.Player}}</td>
+                    <td>{{player.Country}}</td>
+                    <td>{{player['Player Type']}}</td> 
+                </tr>
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+
+        <div *ngIf="domesticPlayers">
+            
+            <h1>{{categoryHeading}}</h1>
+            <hr>
+
+            <table class="ui selectable inverted table">
+                <tr style="height:3em; background-color:#195D10">
+                    <th>#</th>
+                    <th class="ribben label">Name</th>
+                    <th>Team</th>
+                    <th>Player Type</th>
+                </tr>
+                <tr *ngFor="let player of domesticPlayers | paginate: { itemsPerPage: 10, currentPage: p } let i = index" >
+                    <td>{{i + 1}}</td>
+                    <td>{{player.NAME}}</td>
+                    <td>{{player.TEAM}}</td>
+                    <td>{{player['PLAYER TYPE']}}</td> 
+                </tr>
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+        </div>
+    </div>
+    
+    
+    <div class="four wide column" style="margin-top:10em">
+        
+        <div class="ui card" style="background-color: #F1F9FF;">
+            <div class="content">
+                <div class="header">Survey No.1</div>
+                <div class="meta">
+                <span class="category">Which is your Favorite PSL Player</span>
+                </div>
+                <div >
+                    <ul *ngIf="!survey1">
+                        <div class="ui radio checkbox" >
+                            <input type="radio" name="radio" value="Shahid_Afridi" [(ngModel)]="survey1Result">
+                            <label >Shahid Afridi  </label> 
+                        </div>
+                       
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Chris_Ghyle" [(ngModel)]="survey1Result">
+                            <label>Chris Ghyle</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Shane_Watson" [(ngModel)]="survey1Result">
+                            <label>Shane Watson</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Kevin_Peiterson" [(ngModel)]="survey1Result">
+                            <label>Kevin Peiterson</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Brendom_Mecculum" [(ngModel)]="survey1Result">
+                            <label>Brendom Mecculum</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Ahmad_Shahzad" [(ngModel)]="survey1Result">
+                            <label>Ahmad Shahzad</label>
+                        </div>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Umar_Akmal" [(ngModel)]="survey1Result">
+                            <label>Umar Akmal </label>
+                         </div>
+
+                         <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Muhammad_Amir" [(ngModel)]="survey1Result">
+                            <label>Muhammad Amir</label>
+                         </div>
+                         <br>
+                         <br>
+                         <button class="ui button" type="submit" (click)="submitSurvey()">Submit</button>
+                    </ul>
+                </div>
+                <div>
+                    <ul *ngIf="survey1">
+                        <div class="ui radio checkbox" >
+                            <input type="radio" name="radio" value="Shahid_Afridi" [(ngModel)]="survey1Result">
+                            <label >Shahid Afridi ====>{{Shahid_Afridi_Votes | number : '1.2-2'}}%</label> 
+                        </div>
+                       
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Chris_Ghyle" [(ngModel)]="survey1Result">
+                            <label>Chris Ghyle ====>{{Chris_Ghyle_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Shane_Watson" [(ngModel)]="survey1Result">
+                            <label>Shane Watson ====>{{Shane_Watson_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Kevin_Peiterson" [(ngModel)]="survey1Result">
+                            <label>Kevin Peiterson ====>{{Kevin_Peiterson_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Brendom_Mecculum" [(ngModel)]="survey1Result">
+                            <label>Brendom Mecculum =>{{Brendom_Mecculum_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Ahmad_Shahzad" [(ngModel)]="survey1Result">
+                            <label>Ahmad Shahzad ====>{{Ahmad_Shahzad_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Umar_Akmal" [(ngModel)]="survey1Result">
+                            <label>Umar Akmal ====>{{Umar_Akmal_Votes | number : '1.2-2'}}%</label>
+                         </div>
+
+                         <div class="ui radio checkbox">
+                            <input type="radio" name="radio" value="Muhammad_Amir" [(ngModel)]="survey1Result">
+                            <label>Muhammad Amir ====>{{Muhammad_Amir_Votes | number : '1.2-2'}}%</label>
+                         </div>
+                         <br>
+                         <br>
+                         <button class="ui button" type="submit" disabled="survey1" (click)="submitSurvey()">Submit</button>
+                    </ul>
+                </div>
+                
+            </div>
+         </div>
+
+         <br><br><br>
+         <div class="ui card" style="background-color: #F1F9FF;">
+             <div class="content">
+                 <div class="header">Survey No.2</div>
+                 <div class="meta">
+                 <span class="category">Which is Your Favourite Team in PSL 2018</span>
+                 </div>
+                 <div>
+                     <ul *ngIf="!survey2">
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Peshawar_Zalmi" checked [(ngModel)]="survey2Result">
+                             <label>Peshawar Zalmi</label>
+                         </div>
+                         <br>
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Quetta_Gladiators" [(ngModel)]="survey2Result">
+                             <label>Quetta Gladiators</label>
+                         </div>
+                         <br>
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Karachi_Kings" [(ngModel)]="survey2Result">
+                             <label>Karachi Kings</label>
+                         </div>
+                         <br>
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Lahore_Qalandars" [(ngModel)]="survey2Result">
+                             <label>Lahore Qalandars</label>
+                         </div>
+                         <br>
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Multan_Sultan" [(ngModel)]="survey2Result">
+                             <label>Multan Sultans</label>
+                         </div>
+                         <br>
+                         <div class="ui radio checkbox">
+                             <input type="radio" value="Islamabad_United" [(ngModel)]="survey2Result">
+                             <label>Islamabad United</label>
+                             <br>
+                         </div>
+
+                         <br>
+                         <button class="ui button" type="submit" (click)="submitSurvey()">Submit</button>
+                     </ul>
+
+                     <ul *ngIf="survey2">
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Peshawar_Zalmi" checked [(ngModel)]="survey2Result">
+                            <label>Peshawar Zalmi ==>{{Peshawar_Zalmi_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Quetta_Gladiators" [(ngModel)]="survey2Result">
+                            <label>Quetta Gladiators ==>{{Quetta_Gladiators_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Karachi_Kings" [(ngModel)]="survey2Result">
+                            <label>Karachi Kings ==>{{Karachi_Kings_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Lahore_Qalandars" [(ngModel)]="survey2Result">
+                            <label>Lahore Qalandars ==>{{Lahore_Qalandars_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Multan_Sultan" [(ngModel)]="survey2Result">
+                            <label>Multan Sultan ==>{{Multan_Sultan_Votes | number : '1.2-2'}}%</label>
+                        </div>
+                        <br>
+                        <div class="ui radio checkbox">
+                            <input type="radio" value="Islamabad_United" [(ngModel)]="survey2Result">
+                            <label>Islamabad United ==>{{Islamabad_United_Votes | number : '1.2-2'}}%</label>
+                            <br>
+                        </div>
+                        <br>
+                        <button class="ui button" type="submit" disabled="survey2" (click)="submitSurvey()">Submit</button>
+                    </ul>
+ 
+                    
+                 </div>
+                 
+             </div>
+          </div>
+    </div>
+</div>    
+
+<!-- Pakistan Super League Drafting Process -->
+
+<!-- Drafting Process Starts from here. It will pop up after the categories -->
+<!-- Here I placed a check of pickBestT20Players, if it is true then the Drafting will appear on Screen -->
+
+<br><br>
+<div class="ui segment" style="background-color:lightgray; text-align: center;">
+    <!-- Drafting Process Headings -->
+    <br>
+    <h2 class="ui header" >PSL Drafting Process</h2>
+    <br><br>
+</div>
+
+<div class="ui segment" style="width: 100%;" *ngIf="getTokenData()">
+
+    <!-- Show Complete Drafting process for Registered Owners only -->
+    <div class="Row" >
+        <div class="Column">
+            <!-- Buttons for picking players from different Categories in the Drafting process.-->
+            <div class="ui vertical basic buttons" id="drafting"> 
+                <button class="ui button" (click) = "platinumPick()">Platinum Pick</button>
+                <button class="ui button" (click) = "diamondPick()">Diamond Pick</button>
+                <button class="ui button" (click) = "goldPick()">Gold Pick</button>
+                <button class="ui button" (click) = "silverPick()">Silver Pick</button>
+                <button class="ui button" (click) = "supplementoryPick()">Supplementory Pick</button>
+                <button class="ui button" (click) = "emergingPick()">Emerging Pick</button>
+            </div>
+
+            <!-- Dynamically show the selected players in the draft -->
+            <!-- Loading Icon -->
+            <div *ngIf="loading" id="loading" align="top">
+                <div class="ui active inverted dimmer">
+                    <div class="ui medium text loader">Loading</div>
+                </div>
+            </div> 
+            <div *ngIf="draftingPick?.length > 0" class="draftingProcess">
+                <table class="ui selectable inverted table">
+                    <tr style="height:3em; background-color:green">
+                        <th>#</th>
+                        <th>Player</th>
+                        <th>Player Type</th>
+                        <th>Picked Category</th>
+                    </tr>
+                    <tr *ngFor="let players of draftingPick; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{players.Player}}</td>
+                        <td>{{players['Player Type']}}</td>
+                        <td>{{players.Category}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Best Playing 20 and Best Playing 11 -->
+    <div class="ui segment" style="width:100%;">
+        <div class="ui two top attached buttons">
+            <div class="ui button" (click)="getBest20_Players()" id="btnBestPlayers">Best 20 Players</div>
+            <div class="ui button" (click)="getBest11_Players()" id="btnBestPlayers">Best Playing Eleven</div>
+        </div>
+
+        
+        <div *ngIf="!showBestPlaying11" class="ui negative message" style="margin:2em 15em 0.5em 15em; text-align:center;font-size:20px;">
+            Please first select more than 11 players from Drafting Process
+        </div>
+        <div class="ui attached segment" *ngIf="showBestPlaying11 && best_20?.length > 0"> 
+            <h1 class="ui header" style="text-align:center">
+                {{teamHeading}}
+            </h1>   
+            <div >
+                <table class="ui selectable inverted table">
+                    <tr style="height:3em; background-color:green">
+                        <th>#</th>
+                        <th>Player</th>
+                        <th>Player Type</th>
+                        <th>Picked Category</th>
+                    </tr>
+                    <tr *ngFor="let players of best_20; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{players.Player}}</td>
+                        <td>{{players['Player Type']}}</td>
+                        <td>{{players.Category}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="ui attached segment" *ngIf="showBestPlaying11 && best_11?.length > 0"> 
+            <h1 class="ui header" style="text-align:center">
+                {{teamHeading}}
+            </h1>   
+            <div >
+                <table class="ui selectable inverted table">
+                    <tr style="height:3em; background-color:green">
+                        <th>#</th>
+                        <th>Player</th>
+                        <th>Player Type</th>
+                        <th>Picked Category</th>
+                    </tr>
+                    <tr *ngFor="let players of best_11; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{players.Player}}</td>
+                        <td>{{players['Player Type']}}</td>
+                        <td>{{players.Category}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Normal Users can't see the drafting process -->
+<div class="three wide column" style="margin: 5em 35em 0em 35em" *ngIf="!getTokenData()">
+    <h3 class="ui header">Please Log In to access drafting process</h3>
+    <div class="card" style="background-color: #F1F9FF;" >
+        <div class="content" style="margin:0.5em">
+            <div class="header" id="heading">Owner Registration</div>
+            <hr>
+        </div>
+        <div>   
+            <div class="ui bottom attached button" id="signUp" (click)="showSignUpForDrafting()">
+                Sign Up       
+            </div>
+            <div *ngIf="signUpForDrafting">
+                <app-model [(visible)]="dialogVisibility">
+                    <div class="four wide column">
+                        <app-sign-up></app-sign-up>  
+                    </div>
+                </app-model>
+            </div>
+        </div>
+        
+        <br>
+        <div>
+            <div class="ui bottom attached button" id="login" (click)="showDialog = !showDialog" (click)="showLoginForDrafting()">
+                Log In
+            </div>
+            <div *ngIf="loginForDrafting">
+                <app-model [(visible)]="dialogVisibility">
+                    <app-login></app-login>
+                </app-model>
+            </div>
+        </div> 
+    </div>
+</div>
+

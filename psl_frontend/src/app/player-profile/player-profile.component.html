@@ -1,0 +1,125 @@
+
+<br><br><br><br>
+
+<div class="ui segment" style="margin: 0 2em 0 2em"> 
+  <h2 class="ui header" style="text-align:center">
+      {{playerName}} Batting Profile
+  </h2>
+  <table class="ui selectable inverted table">
+    <tr>
+      <th>#</th>
+      <th>Player</th>
+      <th>Country</th>
+      <th>Span</th>
+      <th>Matches</th>
+      <th>Innings</th>
+      <th>Runs</th>
+      <th>Batting Average</th>
+      <th>Batting Strike Rate</th>
+      <th>50s</th>
+      <th>100s</th>
+      <th>Player Type</th>
+      
+    </tr>
+    <tr *ngFor="let players of data; let i = index" >
+        <td>{{i + 1}}</td>
+        <td>{{players.Player}}</td>
+        <td>{{players.Country}}</td>
+        <td>{{players.Span}}</td>
+        <td>{{players.Mat}}</td>
+        <td>{{players.Inns}}</td>
+        <td>{{players.Runs}}</td>
+        <td>{{players.Ave}}</td>
+        <td>{{players.SR}}</td>
+        <td>{{players['50']}}</td>
+        <td>{{players['100']}}</td>
+        <td>{{players['Player Type']}}</td>
+    </tr>
+  </table>`
+  
+  
+  <h2 class="ui header" style="text-align:center">
+      {{playerName}} Bowling Profile
+  </h2>
+  <table class="ui selectable inverted table">
+    <tr>
+        <th>#</th>
+        <th>Player</th>
+        <th>Country</th>
+        <th>Span</th>
+        <th>Matches</th>
+        <th>Innings</th>
+        <th>Overs</th>
+        <th>Runs Given</th>
+        <th>Bowling Average</th>
+        <th>Economy</th>
+        <th>Bowling Strike Rate</th>
+        <th>Wickets</th>
+    </tr>
+    <tr *ngFor="let players of data; let i = index" >
+        <td>{{i + 1}}</td>
+        <td>{{players.Player}}</td>
+        <td>{{players.Country}}</td>
+        <td>{{players.Span}}</td>
+        <td>{{players.Mat}}</td>
+        <td>{{players.Bowling_Inns}}</td>
+        <td>{{players.Overs}}</td>
+        <td>{{players.Runs_Given}}</td>
+        <td>{{players.Bowling_Avg}}</td>
+        <td>{{players.Econ}}</td>
+        <td>{{players.SR_Bowl}}</td>
+        <td>{{players.Wickets}}</td>
+    </tr>
+  </table>`
+  <h2 class="ui header" style="text-align:center">
+      {{playerName}} Fielding Profile
+  </h2>
+  <table class="ui selectable inverted table">
+    <tr>
+        <th>#</th>
+        <th>Player</th>
+        <th>Country</th>
+        <th>Span</th>
+        <th>Matches</th>
+        <th>Innings</th>
+        <th>Dismissals</th>
+        <th>Catches</th>
+        <th>Stumps</th>
+        <th>Dismissals Per Inning (D/I)</th>
+    </tr>
+    <tr *ngFor="let players of data; let i = index" >
+        <td>{{i + 1}}</td>
+        <td>{{players.Player}}</td>
+        <td>{{players.Country}}</td>
+        <td>{{players.Span}}</td>
+        <td>{{players.Mat}}</td>
+        <td>{{players.Bowling_Inns}}</td>
+        <td>{{players.Dismis}}</td>
+        <td>{{players.Ct}}</td>
+        <td>{{players.St}}</td>
+        <td>{{players['D/I']}}</td>
+    </tr>
+  </table>`
+
+  <h2 class="ui header" style="text-align:center">
+    {{playerName}} Rating Statistics
+</h2>
+<table class="ui selectable inverted table">
+  <tr>
+      <th>#</th>
+      <th>Player</th>
+      <th>Country</th>
+      <th>T20 Rating</th>
+      <th>PSL Rating</th>
+      <th>Overall Rating</th>
+  </tr>
+  <tr *ngFor="let players of data; let i = index" >
+        <td>{{i + 1}}</td>
+        <td>{{players.Player}}</td>
+        <td>{{players.Country}}</td>
+        <td>{{players.Rating}}</td>
+        <td>{{players.psl_rating}}</td>
+        <td>{{players.Overall_rating}}</td>
+  </tr>
+</table>`
+</div>

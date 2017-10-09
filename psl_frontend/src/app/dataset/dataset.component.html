@@ -1,0 +1,55 @@
+<br><br>
+<h1 class="ui header" style="text-align:center">
+  Dataset Section
+</h1>
+
+<div align="center">
+  <button class="ui button" (click)="download_T20_Dataset()"><i class="download icon"></i>T20 Dataset</button>
+  <button class="ui button" (click)="download_Domestic_Dataset()"><i class="download icon"></i>Pakistan Domestic Player Dataset</button>
+  <button class="ui button" (click)="download_PSL_Dataset()"><i class="download icon"></i>PSL Dataset</button>
+  <button class="ui button" (click)="download_PSL_PLayerList()"><i class="download icon"></i>PSL Player List</button>
+</div>
+
+<br>
+<br>
+<div *ngIf="loading" id="loading" >
+  <div class="ui segment" align="center">
+      <div class="ui active inverted dimmer">
+          <div class="ui medium text loader">Downloading</div>
+      </div>
+  </div>
+</div>
+<br>
+
+
+<div class="ui segment" *ngIf="data">
+  <h1 class="ui header" style="text-align:center">
+      {{datasetHeading}}
+  </h1>
+  <table class="ui selectable inverted table" >
+    <tr style="height:3em; background-color:green">
+        <th>#</th>
+        <th>Player</th>
+        <th>Country</th>
+        <th>Runs</th>
+        <th>Wickets</th>
+        <th>Player Type</th>
+        <th>T20 Rating</th>
+        <th>PSL Rating</th>
+        <th>Overall Rating</th>
+    </tr>
+    <tr *ngFor="let player of data | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{player.Player}}</td>
+        <td>{{player.Country}}</td>
+        <td>{{player.Runs}}</td>
+        <td>{{player.Wickets}}</td>
+        <td>{{player['Player Type']}}</td>
+        <td>{{player.Rating}}</td>
+        <td>{{player.psl_rating}}</td>
+        <td>{{player.Overall_rating}}</td>
+    </tr>
+  
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>

@@ -1,0 +1,136 @@
+<h1 class="ui center aligned header">
+    <img src="\assets\psl_logo.jpg" class="ui circular image">Welcome To Pakistan Super League
+</h1>
+
+<br>
+<!-- Icon of loading -->
+<div *ngIf="loading" >
+    <div class="ui segment">
+        <div class="ui active inverted dimmer">
+            <div class="ui medium text loader">Loading</div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<!-- Buttons for loading Categories data from Database-->
+<div class="RowForButtons">
+    <div class="ColumnForButtons">
+        <button class="positive ui button" (click)="loadPlatinumCategory()">Load Platinum Category</button>
+    </div>
+    <div class="ColumnForButtons">
+        <button class="positive ui button" (click)="loadDiamondCategory()">Load Diamond Category</button>
+    </div>
+
+    <div class="ColumnForButtons">
+        <button class="positive ui button" (click)="loadGoldCategory()">Load Gold Category</button>
+    </div>    
+</div>
+
+<!-- data in tabular form after successfully loading from db -->
+<div class="Row">
+    <div class="Column">
+        
+        <h2 ui header>Platinum Category Players</h2>
+        <table class="ui selectable inverted table">
+            <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Player Type</th>
+            </tr>
+            <tr *ngFor="let players of platinumPlayers; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{players.Player}}</td>
+                <td>{{players.Player_Type}}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="Column">
+        <h2 ui header>Diamond Category Players</h2>
+        <table class="ui selectable inverted table">
+            <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Player Type</th>
+            </tr>
+            <tr *ngFor="let players of diamondPlayers; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{players.Player}}</td>
+                <td>{{players.Player_Type}}</td>
+            </tr>
+        </table>`
+    </div>
+            
+    <div class="Column">
+        <h2 ui header>Gold Category Players</h2>
+        <table class="ui selectable inverted table">
+            <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Player Type</th>
+            </tr>
+        
+            <tr *ngFor="let players of goldPlayers; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{players.Player}}</td>
+                <td>{{players.Player_Type}}</td>
+            </tr>
+        </table>`
+    </div>
+</div>
+
+
+<!-- Drafting Process Starts from here. It will pop up after the categories -->
+<!-- Here I placed a check of pickBestT20Players, if it is true then the Drafting will appear on Screen -->
+
+<div *ngIf="draftingProcess" >
+    <div class="ui segment">
+
+        <!-- Drafting Process Headings -->
+        <p style="text-align:center">********************************************************************************************************************************</p>
+        <h2 class="ui header" style="text-align:center">PSL Drafting Process</h2>
+        <h3 class="ui header" style="text-align:center">Our system will give the best 20 players</h3>
+        
+        <!-- Buttons for picking players from different Categories in the Drafting process.-->
+        <div class="RowForButtons">
+            <div class="ColumnForButtons">
+                <button class="positive ui button" (click)="platinumPick()">Platinum Pick</button>
+            </div>
+            <div class="ColumnForButtons">
+                <button class="positive ui button" (click)="diamondPick()">Diamond Pick</button>
+            </div>
+        
+            <div class="ColumnForButtons">
+                <button class="positive ui button" (click)="goldPick()">Gold Pick</button>
+            </div>    
+        </div>
+
+        <!-- Dynamically show the selected players in the draft -->
+        <div *ngIf="bestPlaying_20?.length > 0" class="draftingProcess">
+            <h2>Best Playing 20</h2>
+            <table class="ui selectable inverted table">
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Player Type</th>
+                </tr>
+                <tr *ngFor="let players of bestPlaying_20; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{players.Player}}</td>
+                    <td>{{players.Player_Type}}</td>
+                </tr>
+            </table>`
+        </div>
+    </div>
+</div>
+
+
+<!-- <button type="button" (click)="loadData()">Make Request</button>
+<div *ngIf="loading">loading...</div>
+<pre>{{data | json}}</pre> -->
+
+
+
+

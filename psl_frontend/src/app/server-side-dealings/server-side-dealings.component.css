@@ -1,0 +1,37 @@
+#login{
+    background-color: white;
+    margin:0em 1em 1em 1em;
+    border: 1px solid #3b5998;
+    color:"#3b5998"
+}
+#login:hover{
+    background-color: #3b5998; /* Green */
+    color: white;
+}
+
+#loadingIcon{
+    font-size:20px; 
+    color:gray; 
+    text-align:center;
+    padding-top: 1em;
+}
+.logo{
+    width: 100em;
+    height: 10em;
+}
+
+#drafting{
+    background-color: lightgray; /* Green background */
+    color: white; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 15%; /* Set a width if needed */
+}
+
+#btnBestPlayers:hover {
+    background-color: #3e8e41
+}
+    
+
+
+
+

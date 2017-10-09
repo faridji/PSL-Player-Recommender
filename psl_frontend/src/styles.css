@@ -1,0 +1,69 @@
+/* You can add global styles to this file, and also import other style files */
+#gettingFile {
+    border: 1px solid black;
+    width: 50%;
+    left: 350px;
+    margin: 0 auto;
+}
+#signUp{
+    background-color: #3b5998;
+    margin:0.3em 1em 0.5em 1em; 
+    color: white
+}
+#btnGetPath{
+    margin-left: 600px;
+    margin-top: 15px
+}
+
+#fileLoader
+{
+    display:none;
+}
+
+.draftingProcess{
+    float: right;
+    width: 80%;
+}
+.RowForButtons
+{
+    display: table;
+    width: 100%; /*Optional*/
+    border-spacing: 20px; /*Optional*/
+}
+
+.ColumnForButtons
+{
+    display: table-cell;
+    border-spacing: 20px; /*Optional*/
+}
+
+.Row
+{
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 20px; /*Optional*/
+}
+.Column
+{
+    display: table-cell;
+    /* background-color: #21CE21; Optional */
+    border-spacing: 20px; /*Optional*/
+}
+
+body {
+    background-color: white;
+  }
+  
+.main.container {
+margin-top: 7em;
+}
+.wireframe {
+margin-top: 2em;
+}
+.ui.footer.segment {
+margin: 15em 0em 0em;
+padding: 5em 0em;
+}
+
+
