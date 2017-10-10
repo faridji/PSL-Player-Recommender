@@ -5,7 +5,7 @@ different categories of psl (Platinum, Diamond, Gold, Silver, Emerging). Then we
 process. At the end of drafting, each owner of 6 different teams get 20 players team. Our system then give the best playing 11 to each
 owner. It can alse be used by PCB to form the above 5 different categories.
 ## Introduction
-This is web application which is made in Angular 2 and Node.js. It uses machine learning in python to recommend player to each owner. We used two machine learning algorithms in it. 
+This is web application which is made in Angular 2 and Node.js. It uses machine learning in python to recommend player to each owner. We used two machine learning algorithms to do this. 
 ### 1. K-means
 This algorithm is a unsupervised clustering algorithm. It takes a dataset of players and then clusters them into following 6 categories.
 - Batsman
@@ -32,30 +32,30 @@ Our system places players into different PSL categories based on their performan
 
 We use different statistical formulas to rank player. 
 ### Best 20 Player
-We implemented the complete drafting process of PSL. In PSL drafting process their are 5 pick. In each pick owner has to select a player. Our system gives each owner, players from different categories based on player performance. Following list show complete drafting process.
+We implemented the complete drafting process of PSL. In PSL drafting process their are 5 picks. In each pick, owner has to select a player. Our system gives each owner, players from different categories based on player performance. Following list show the complete drafting process.
 - Platinum pick (3 players)
 - Diamond pick (3 players)
 - Gold pick (3 players)
 - Silver pick (4 players)
 - Emerging pick (4 players)
 
-At the end each owner gets a team of 20 players and it is saved into its profile.
+At the end, each owner gets a team of 20 players and save it to his profile.
 ### Best Playing 11
 Once owner selects a team of 20 players, our system then provide owners the facility to get best 11.
 
 ### Sign Up and Login
-In order to get to drafting process, owner must have an account. Our system gives access to drafting process to six PSL owners. Normal users can only see the players of different PSL Categories.
-### Ower Dashboard (Profile)
+In order to get the drafting process, owner must have an account. Our system gives access to drafting process to six PSL owners. Normal users can only see the players of different PSL Categories.
+### Owner Dashboard (Profile)
 Our system maintain a complete profile for each owners. It includes:
 1. Owner personal information
 2. Best 20 players
 3. Best 11
 
 Owner can edit his personal information and view best 20 and 11 players.
-### Survays
-Our system provides different survays to users so that they can choose players and teams of thier choise. In this way our system get popularity of different PSL players and team and then add that popularity to PSL player rating.
+### Servays
+Our system provides different servays to users so that they can choose players and teams of thier choise. In this way our system get popularity of different PSL players and team and then add that popularity to PSL player rating.
 ### Previous PSL teams.
-Our system also presents squad of the six different PSL teams to user. Following are the different teams in PSL.
+Our system also presents squad of the six PSL teams to user. Following are the different teams in PSL.
 - Peshawar Zalmi
 - Queta Gladiators
 - Lahore Qalandars
@@ -81,5 +81,3 @@ Our system also presents squad of the six different PSL teams to user. Following
 - Scikit learn
 ### Database
 - Mongo DB (NoSQL database)
-## Screenshots
-### Main Page
