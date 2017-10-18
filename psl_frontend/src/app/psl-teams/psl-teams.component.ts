@@ -15,6 +15,8 @@ export class PslTeamsComponent implements OnInit {
   players : Object;
   loading : Object;
   heading : string;
+
+  info : String = ""
   constructor(private router: Router,private route: ActivatedRoute,private http:Http) { }
 
   ngOnInit() {
@@ -122,6 +124,8 @@ export class PslTeamsComponent implements OnInit {
   }
 
   multanSultanTeam() : void{
+   
+    
     this.options = {
       teamName : 'multan_sultan',
     }

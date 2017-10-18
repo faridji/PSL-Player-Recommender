@@ -115,6 +115,9 @@ if sys.argv[1] == 'islamabad_united':
 if sys.argv[1] == 'karachi_kings':
     
     karachiTeam = PSL_Team_Squad('http://pslt20.com/karachi-kings-squad-2017/')
+    karachiTeam.drop(karachiTeam.columns[len(karachiTeam.columns)-1], axis=1, inplace=True)
+    """ Droping last row from Dataframe """
+    karachiTeam.drop(karachiTeam.index[len(karachiTeam)-1], inplace=True)
 
     # Insert team record into database
     insertData('psl_t20', sys.argv[1],karachiTeam);
@@ -122,4 +125,4 @@ if sys.argv[1] == 'karachi_kings':
 #Function called from NODE.JS SERVER to grab Multan Sultan Team
 if sys.argv[1] == 'multan_sultan':
     # Insert team record into database
-    insertData('psl_t20', sys.argv[1],pd.DataFrame(data=None));
+    insertData('psl_t20', sys.argv[1],pd.DataFrame());

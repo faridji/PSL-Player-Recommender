@@ -1,0 +1,153 @@
+<div class="ui fixed inverted pointing menu" style="background-color:#343432">
+  <div class="item">
+    <img src="\assets\psl_logo.jpg" class="logo">Pakistan Super League
+  </div>
+      
+  <div class="right menu">
+    <div class="item">
+      
+      <!-- Owner profile + logout option -->
+      <a class="circular ui icon button">
+          <i class="user icon"></i>
+      </a>
+     
+    </div>
+  </div>
+</div>
+
+<body class="template">
+  <div class="ui grid">
+    <div class="row">
+      <div class="column" id="sidebar">
+        <img src="./assets/farid.jpg" class="ui small circular image">
+        <h4 style="margin-left:3em; color:white">Admin</h4>
+        <div class="ui secondary vertical fluid menu">
+            <a class="item" (click)="updateT20Dataset()">Update T20 Datasets</a>
+            <a class="item" (click)="updatePSLDataset()">Update PSL Datasets</a>
+            <a class="item" (click)="updateDomesticDataset()">Update Domestic Datasets</a>
+            <a class="item" (click)="makeCategories()">Make PSL Categories</a>
+            <a class="item" (click)="viewPSLOwners()">View PSL Onwners</a>
+            <a class="item" (click)="signOut()">Sign Out</a>
+            <div class="ui hidden divider"></div>
+        </div>
+      </div>
+    </div>
+    <div class="column" id="content">
+      <div class="ui grid" >
+          <div *ngIf="loading" id="loading">
+            <div class="ui active inverted dimmer">
+                <div class="ui medium text loader">loading</div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="mainData">
+            <br><br>
+            <h1 class="ui huge header">
+                Admin Dashboard
+            </h1>
+          </div>
+          <div class="row" *ngIf="mainData == false">
+              <br><br><br><br>
+              <h1 class="ui huge header">
+                  {{title}}
+              </h1>
+          </div>
+
+          <div class="ui divider"></div>
+
+          <!-- Cards for main data -->
+          <div class="one column left aligned row" *ngIf="mainData == true">
+            <div class="ui cards">
+              <div class="ui card" style="width:18em; margin-right:2em" >
+                
+                <img src="/assets/avatar.png" class="visible content">
+                
+                <div class="content">
+                  <a class="header">No of Registered Owners</a>
+                </div>
+                <div class="extra content">
+                  <a>
+                    <i class="users icon"></i>
+                    1 owner(s)
+                  </a>
+                </div>
+              </div>
+
+
+              <div class="ui card" style="width:18em; margin-right:2em">
+                  <div class="content">
+                    <div class="header">Admin Functionalities</div>
+                    <div class="meta">
+                    <span class="category"></span>
+                    </div>
+                    <div >
+                      <ul>
+                        <li>Update T20 Dataset</li>
+                        <li>Update PSL Dataset</li>
+                        <li>Update Domestic Dataset</li>
+                        <li>Make PSL Categories</li>
+                        <li>View Different Owners</li>
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="one column left aligned row" *ngIf="owners.length > 0">
+            <!-- Edit options for Owner Best 20 players -->
+            <table class="ui selectable inverted table" >
+              <tr style="height:3em; background-color:green">
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Password</th>
+                  <th>Email</th>
+                  <th>CNIC</th>
+                  <th>Team Name</th>
+              </tr>
+
+              <tr *ngFor="let owner of owners, let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{owner.name}}</td>
+                <td>{{owner.password}}</td>
+                <td>{{owner.email}}</td>
+                <td>{{owner.cnic}}</td>
+                <td>{{owner.teamName}}</td>
+              </tr>
+            </table>      
+          </div>
+
+          <div class="one column left aligned row" *ngIf="isDataExits == true">
+            <!-- Edit options for Owner Best 20 players -->
+            <table class="ui selectable inverted table" >
+              <tr style="height:3em; background-color:green">
+                  <th>#</th>
+                  <th>Player</th>
+                  <th>Country</th>
+                  <th>Runs</th>
+                  <th>Wickets</th>
+                  <th>Player Type</th>
+                  <th>T20 Rating</th>
+                  <th>PSL Rating</th>
+                  <th>Overall Rating</th>
+              </tr>
+              <tr *ngFor="let player of data  let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>{{player.Player}}</td>
+                  <td>{{player.Country}}</td>
+                  <td>{{player.Runs}}</td>
+                  <td>{{player.Wickets}}</td>
+                  <td>{{player['Player Type']}}</td>
+                  <td>{{player.Rating}}</td>
+                  <td>{{player.psl_rating}}</td>
+                  <td>{{player.Overall_rating}}</td>
+              </tr>
+            
+            </table>    
+          </div> 
+      </div>
+    </div>
+  </div>
+</body>
+
+

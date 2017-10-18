@@ -3,13 +3,13 @@
     <div class="ui grid">
         <div class="row">
             <div class="column" id="sidebar">
-                <input type="file" name="student_img" (change)="fileChange(input)" #input /> 
-                <div> <img class="ui small circular image" [attr.src]='file_srcs[0]' alt="" /></div>
-                <h4 style="margin-left:3em; color:black">{{selectedOwner.name}}</h4>
+                <img src="./assets/avatar.png" class="ui circular image">
+                <h4 style="margin-left:3em; color:black">{{ownerName}}</h4>
                 <div class="ui secondary vertical fluid menu">
-                    <a personalInfo class="item" (click)="personal_Info($event)">Personal Information</a>
-                    <a best20Tabl class="item" (click)="best_20($event)"> Best 20</a>
-                    <a best11Tab class="item" (click)="best_11($event)">Best 11</a>
+                    <a  class="item" (click)="personal_Info()">Personal Information</a>
+                    <a  class="item" (click)="best_20()">Best 20</a>
+                    <a  class="item" (click)="best_11()">Best 11</a>
+                    <a  class="item" (click)="deleteAccount()">Delete Account</a>
                     <a class="item" (click)="signOut()">Sign Out</a>
                 <div class="ui hidden divider"></div>
             </div>
@@ -17,6 +17,12 @@
         
         <div class="column" id="content">
             <div class="ui grid">
+                <div *ngIf="loading" id="loading">
+                    <div class="ui active inverted dimmer">
+                        <div class="ui medium text loader">Deleting account</div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <br><br><br><br>
                     <h1 class="ui huge header">
@@ -28,9 +34,17 @@
 
                     <!-- Owner Personal Information -->
                     <div class="column">
+                        <div *ngIf="success">
+                            <div class="ui green message">
+                                <i class="close icon" (click)="closeMessageBox()"></i>
+                                <div class="header">
+                                    {{message}}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <!-- Edit options for the owner personal Information -->
-                    
-                        <form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="ui large form" style="margin-left:5em">
+                        <form #f="ngForm" (ngSubmit)="saveChanges(f.value)" class="ui large form" style="margin-left:5em">
                             <div class="ui stacked segment">
                                 
                                 <div class="field">
@@ -62,7 +76,6 @@
                                 
                             <div class="column">
                                 <button type="submit" class="ui primary button" type="submit" style="margin-bottom: 0.4cm;">Save Changes</button>
-                                <button type="submit" class="ui button" type="submit" id="cancel_Button">Cancel</button>
                             </div>
                                 
                         
@@ -99,8 +112,15 @@
                     </table>
                 </div>
 
+                
+                
+                
                 <div class="ui divider"></div>
+                
                 <div class="one column left aligned row" *ngIf="best11">
+                    <div style="margin-right:2em" *ngIf="best11_player.length > 0">
+                        <button class="ui red button" (click)="deleteBest11()">Delete best 11</button>
+                    </div>
                     <!-- Edit options for Owner Best 20 players -->
                     <table class="ui selectable inverted table" style="margin-left:5em">
                         <tr style="height:3em; background-color:green">

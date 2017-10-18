@@ -1,6 +1,6 @@
 import { Component, OnInit,Pipe} from '@angular/core';
 import {Http, Response} from '@angular/http';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class ServerSideDealingsComponent implements OnInit {
   domesticPlayers : Object;
 
   p: number = 1;
+  message : Object
   //Variables for different Drafting picks
   draftingPick : Object;
 
@@ -71,12 +72,12 @@ export class ServerSideDealingsComponent implements OnInit {
   loginForDrafting : boolean;
   dialogVisibility : boolean;
   
-  constructor(private http : Http,private router: Router) {
+  constructor(private http : Http,private router: Router, private route: ActivatedRoute) {
 
     console.log("I am in Constructor")
     this.dialogVisibility = false;
     this.showBestPlaying11 = true;
-
+    this.message = "farid aldjf"
       
       this.loading = true;
       this.http.get('http://127.0.0.1:8081/PSL/Categories/Platinum')
@@ -461,9 +462,17 @@ showLoginForDrafting() : void{
   return localStorage.getItem('currentUserToken')
 }
 
+closeMessageBox() : void{
+  this.showBestPlaying11 = true;
+  this.message = ""
+}
 
 ngOnInit() {
-  console.log("I am in ngOnInit() Method")
+  this.route.queryParams.subscribe(params => {
+    // Defaults to 0 if no query param provided.
+    this.message = params['message']
+    console.log("Oninit Message: ", this.message)
+  });
 }
 
 }

@@ -626,7 +626,6 @@ def diamond_pick(category, ownerTeam):
 
 def gold_pick(category,ownerTeam):
     gold_pick = []
-    
     category = category.sort_values(['Overall_rating'], ascending=[False])
     batting_df = recommended_Player_Batting_Category(category)
     allrounder_df = recommended_Player_Allrounder_Category(category)
@@ -671,6 +670,7 @@ def gold_pick(category,ownerTeam):
     best_20 = best_20.append(gold_pick)
     best_20.reset_index(drop=True, inplace=True)
     delete_collection_from_db(ownerTeam)
+    best_20=best_20.drop('_id',1)
     insertData('psl_t20', ownerTeam, best_20)
     """ Now updating Diamond category in DB """
     delete_collection_from_db('Gold')
@@ -838,7 +838,8 @@ def silver_pick(category):
     
     category = category.sort_values(['Overall_rating'], ascending=[False])
     silver_category_list = recommended_Player_For_Selection(category)
-    silver_category_df = pd.DataFrame(silver_category_list)
+    # silver_category_df = pd.DataFrame(silver_category_list)
+    silver_category_df = loadingData('psl_t20', 'Silver')
     """ Reset index """
     silver_category_df.reset_index(drop=True, inplace=True)
     for index, player in silver_category_df.iterrows():
@@ -847,7 +848,7 @@ def silver_pick(category):
         silver_category_count = len(silver_category_df)
         """ Generate random number """
         random_number = randint(0, silver_category_count-1)
-        if count < 6 or count < 6:
+        if count <= 5 or count <= 5.0:
             silver_pick.append(silver_category_df.loc[random_number])
             silver_category_df.drop(silver_category_df.index[[random_number]], inplace=True)
             count+=1
@@ -870,7 +871,276 @@ def silver_pick(category):
     
     return silver_pick
 
+def suplementary_pick(ownerTeam):
+    suplementary_pick = []
+    suplementary_category_list = []
+    foreign = 1
+    local = 1
 
+    suplementary_category_list = recommended_Player_For_Selection_Suplementary()
+    suplementary_category_df = pd.DataFrame(suplementary_category_list)
+    print(suplementary_category_df[['Player', 'Player Type']])
+    for index, player in suplementary_category_df.iterrows():
+        """ Reset index """
+        suplementary_category_df.reset_index(drop=True, inplace=True)
+        suplementary_category_count = len(suplementary_category_df)
+        """ Generate random number """
+        random_number = randint(0, suplementary_category_count-1)
+
+        if suplementary_category_df.loc[random_number, "Overseas_Local"] == "Foreign":
+            if foreign == 1:
+                suplementary_pick.append(suplementary_category_df.loc[random_number])
+                print('Foreign')
+                foreign+=1
+
+        if suplementary_category_df.loc[random_number, "Overseas_Local"] == "Local":
+            if local < 4:
+                suplementary_pick.append(suplementary_category_df.loc[random_number])
+                print('Local')
+                local+=1
+        """ Drop the Selected Player """
+        suplementary_category_df.drop(suplementary_category_df.index[[random_number]], inplace=True)
+
+    """ Dataframe """
+    suplementary_pick = pd.DataFrame(suplementary_pick)
+    for index_1, player in suplementary_pick.iterrows():
+        suplementary_pick.loc[index_1, 'Category'] = 'Supplementory'
+
+    """ Reset index of Suplementary pick """
+    suplementary_pick.reset_index(drop=True, inplace=True)
+    print('Update best_20 Collection')
+    # """ Now updating best20 """
+    insert_specific_record(ownerTeam, suplementary_pick)
+    print('Suplementory Picked')
+    """ Reducing picked player from category list """
+    reducingPlayers_FromCategories(suplementary_pick)
+
+    return suplementary_pick
+
+def recommended_Player_For_Selection_Suplementary():
+    p_bst = 1
+    p_bt_all = 1
+    p_bl_all = 1
+    p_wkt=1
+    p_all=1
+    p_bl = 1
+    d_bst = 1
+    d_bt_all = 1
+    d_bl_all = 1
+    d_wkt=1
+    d_all=1
+    d_bl = 1
+    g_bst = 1
+    g_bt_all = 1
+    g_bl_all = 1
+    g_wkt=1
+    g_all=1
+    g_bl = 1 
+    s_bst = 1
+    s_bt_all = 1
+    s_bl_all = 1
+    s_wkt=1
+    s_all=1
+    s_bl = 1 
+    platinum = loadingData('psl_t20', 'Platinum')
+    diamond = loadingData('psl_t20', 'Diamond')
+    gold = loadingData('psl_t20', 'Gold')
+    silver = loadingData('psl_t20', 'Silver')
+
+    # platinum = pd.DataFrame.sort,'Overall_rating',ascending=[False])
+    platinum = platinum.sort_values(['Overall_rating'], ascending=[False])
+    """ List for recomended top player from Platinum """
+    recommended_player_list = []
+    for index_1, player_1 in platinum.iterrows():
+        if player_1['Player Type'] == 'Batsman':
+            if p_bst == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_bst+=1
+        if player_1['Player Type'] == 'Batting Allrounder':
+            if p_bt_all == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_bt_all+=1
+        if player_1['Player Type'] == 'Wicket keeper Batsman':
+            if p_wkt == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_wkt+=1
+        if player_1['Player Type'] == 'Bowler':
+            if p_bl == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_bl+=1
+        if player_1['Player Type'] == 'Bowling Allrounder':
+            if p_bl_all == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_bl_all+=1
+        if player_1['Player Type'] == 'Allrounder':
+            if p_all == 1:
+                recommended_player_list.append(platinum.loc[index_1])
+                p_all+=1
+                
+    diamond = diamond.sort_values(['Overall_rating'], ascending=[False])
+    """ List for recomended top player from Diamond """
+    for index_1, player_1 in diamond.iterrows():
+        if player_1['Player Type'] == 'Batsman':
+            if d_bst == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_bst+=1
+        if player_1['Player Type'] == 'Batting Allrounder':
+            if d_bt_all == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_bt_all+=1
+        if player_1['Player Type'] == 'Wicket keeper Batsman':
+            if d_wkt == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_wkt+=1
+        if player_1['Player Type'] == 'Bowler':
+            if d_bl == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_bl+=1
+        if player_1['Player Type'] == 'Bowling Allrounder':
+            if d_bl_all == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_bl_all+=1
+        if player_1['Player Type'] == 'Allrounder':
+            if d_all == 1:
+                recommended_player_list.append(diamond.loc[index_1])
+                d_all+=1
+                
+    gold = gold.sort_values(['Overall_rating'], ascending=[False])
+    """ List for recomended top player from Gold """
+    for index_1, player_1 in gold.iterrows():
+        if player_1['Player Type'] == 'Batsman':
+            if g_bst == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_bst+=1
+        if player_1['Player Type'] == 'Batting Allrounder':
+            if g_bt_all == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_bt_all+=1
+        if player_1['Player Type'] == 'Wicket keeper Batsman':
+            if g_wkt == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_wkt+=1
+        if player_1['Player Type'] == 'Bowler':
+            if g_bl == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_bl+=1
+        if player_1['Player Type'] == 'Bowling Allrounder':
+            if g_bl_all == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_bl_all+=1
+        if player_1['Player Type'] == 'Allrounder':
+            if g_all == 1:
+                recommended_player_list.append(gold.loc[index_1])
+                g_all+=1
+                
+                
+    silver = silver.sort_values(['Overall_rating'], ascending=[False])
+    """ List for recomended top player from Silver """
+    for index_1, player_1 in silver.iterrows():
+        if player_1['Player Type'] == 'Batsman':
+            if s_bst == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_bst+=1
+        if player_1['Player Type'] == 'Batting Allrounder':
+            if s_bt_all == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_bt_all+=1
+        if player_1['Player Type'] == 'Wicket keeper Batsman':
+            if s_wkt == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_wkt+=1
+        if player_1['Player Type'] == 'Bowler':
+            if s_bl == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_bl+=1
+        if player_1['Player Type'] == 'Bowling Allrounder':
+            if s_bl_all == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_bl_all+=1
+        if player_1['Player Type'] == 'Allrounder':
+            if s_all == 1:
+                recommended_player_list.append(silver.loc[index_1])
+                s_all+=1
+    
+    recommended_player_df = pd.DataFrame(recommended_player_list)
+    """ Reset index """
+    recommended_player_df.reset_index(drop=True, inplace=True)
+    return recommended_player_df
+    
+def reducingPlayers_FromCategories(suplementary_pick):
+    platinum = loadingData('psl_t20', 'Platinum')
+    diamond = loadingData('psl_t20', 'Diamond')
+    gold = loadingData('psl_t20', 'Gold')
+    silver = loadingData('psl_t20', 'Silver')
+    
+    for index_1, pick_player in suplementary_pick.iterrows():
+        for index_2, dataset_player in platinum.iterrows():
+            if pick_player['Player'] == dataset_player['Player'] :
+                platinum.drop(index_2,inplace=True)
+                platinum.reset_index(drop=True,inplace=True)
+                
+        for index_, dataset_player_ in diamond.iterrows():
+            if pick_player['Player'] == dataset_player_['Player'] :
+                diamond.drop(index_,inplace=True)
+                diamond.reset_index(drop=True,inplace=True)
+                
+        for index_3, dataset_player_3 in gold.iterrows():
+            if pick_player['Player'] == dataset_player_3['Player'] :
+                gold.drop(index_3,inplace=True)
+                gold.reset_index(drop=True,inplace=True)
+                
+        for index_4, dataset_player_4 in silver.iterrows():
+            if pick_player['Player'] == dataset_player_4['Player'] :
+                silver.drop(index_4,inplace=True)
+                silver.reset_index(drop=True,inplace=True)
+    
+    """ Now updating Categories in DB """
+    delete_collection_from_db('Platinum')
+    insertData('psl_t20', 'Platinum', platinum)
+    delete_collection_from_db('Diamond')
+    insertData('psl_t20', 'Diamond', diamond)
+    delete_collection_from_db('Gold')
+    insertData('psl_t20', 'Gold', gold)
+    delete_collection_from_db('Silver')
+    insertData('psl_t20', 'Silver', silver)
+
+def emergingPick(category,batsman,bowler, allrounder):
+    batsman_count = 1
+    bowler_count = 1
+    allrounder_count = 1
+    emerging_Pick = []
+
+    for index, player in category.iterrows():
+        if batsman_count <= batsman:
+            if player['Player Type'] == 'Batsman':
+                emerging_Pick.append(category.loc[index])
+                batsman_count += 1
+
+        if bowler_count <= bowler:
+            if player['Player Type'] == 'Bowler':
+                emerging_Pick.append(category.loc[index])
+                bowler_count += 1
+
+        if allrounder_count <= allrounder:
+            if player['Player Type'] == 'Allrounder':
+                emerging_Pick.append(category.loc[index])
+                allrounder_count += 1
+
+    emerging_Pick = pd.DataFrame(emerging_Pick)
+    for index_1, player in emerging_Pick.iterrows():
+        emerging_Pick.loc[index_1, 'Category'] = 'Emerging'
+
+    """ Reset index of platinum pick """
+    emerging_Pick.reset_index(drop=True, inplace=True)
+    """ Reducing picked player from category list """
+    category = reducing_pickedPlayer_from_list(emerging_Pick, category)
+    """ Now updating Platinum category in DB """
+    delete_collection_from_db('Emerging')
+
+    # Insert the newly created Platinum category after removing the Platinum Pick Players;
+    insertData('psl_t20', 'Emerging', category)
+
+    return emerging_Pick;
 
 # GENETIC ALGORITHM Section
 def individual_team(length,min,max):
@@ -1004,7 +1274,9 @@ def best11_using_Genetic_Algorithm(ownerName):
 
     for i in range(40):
         teams = evolution_of_teams(teams,ownerName)
+    delete_collection_from_db(ownerName+"_best_11")
     insertData('psl_t20',ownerName+"_best_11",best20.loc[teams[-1]])
+
 
 #Function called from NODE.JS SERVER to pick platinum players in the Drafting Process
 if sys.argv[1] == 'platinumPick':
@@ -1036,17 +1308,17 @@ if sys.argv[1] == 'silverPick':
 
 #Function called from NODE.JS SERVER to pick supplementory players in the Drafting Process
 if sys.argv[1] == 'supplementoryPick':
-    data = loadingData('psl_t20','Diamond');
-    supplementory_pick_players = data.head(3)
-    # Insert the best playing 20 into database;
-    insert_specific_record(sys.argv[2], supplementory_pick_players)
+    suplementry = suplementary_pick(sys.argv[2])
+
 
 #Function called from NODE.JS SERVER to pick emerging players in the Drafting Process
 if sys.argv[1] == 'emergingPick':
-    data = loadingData('psl_t20','Emerging');
-    emerging_pick_players = data.head(4)
+    emerging = loadingData('psl_t20', 'Emerging')
+    emerging_pick_players = emergingPick(emerging,1,1,1)
     # Insert the best playing 20 into database;
-    insert_specific_record(sys.argv[2], emerging_pick_players)
+
+    insertData('psl_t20', sys.argv[2], emerging_pick_players)
+    print(emerging_pick_players)
 
 #Function called from NODE.JS SERVER to choose best Playing 11 for a team using GENETIC ALGORITHN
 if sys.argv[1] == 'best_11':

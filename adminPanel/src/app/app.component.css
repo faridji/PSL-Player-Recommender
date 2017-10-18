@@ -1,0 +1,50 @@
+body {
+    display: relative;
+  }
+  
+  #sidebar {
+    position: fixed;
+    top: 49.8px;
+    left: 0;
+    bottom: 0;
+    width: 18%;
+    background-color: #343432;
+    padding: 0px;
+  }
+  #sidebar .ui.menu {
+    margin: 2em 0 0;
+    font-size: 16px;
+  }
+  #sidebar .ui.menu > a.item {
+    color: #337ab7;
+    border-radius: 0 !important;
+  }
+  #sidebar .ui.menu > a.item.active {
+    background-color: #337ab7;
+    color: white;
+    border: none !important;
+  }
+  #sidebar .ui.menu > a.item:hover {
+    background-color: #4f93ce;
+    color: white;
+  }
+  
+  #content {
+    margin-left: 19%;
+    margin-right: 8%;
+    width: 81%;
+    margin-top: 3em;
+    padding-left: 3em;
+    float: left;
+  }
+ 
+  #content h1 {
+    font-size: 36px;
+  }
+  #content .ui.divider:not(.hidden) {
+    margin: 0;
+  }
+  #content table.ui.table {
+    border: none;
+  }
+  

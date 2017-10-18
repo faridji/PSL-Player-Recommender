@@ -1,3 +1,5 @@
+
+
 // Requires all the dependancies
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
@@ -846,7 +848,6 @@ app.post('/PSL/goldPick', function (req, res) {
 });
 
 // 4) Silver Pick
-// 3) Gold Pick
 app.post('/PSL/silverPick', function (req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -892,20 +893,31 @@ app.post('/PSL/supplementoryPick', function (req, res) {
         if (err) throw err;
         console.log("Connection Established.")
 
-        var options = {args: [req.body.pick,req.body.owner]};
-        PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
-            if (err) {
-                throw err
-                res.end(JSON.stringify(err))
+        db.collection(req.body.owner).find( { 'Category': 'Supplementory' } ).toArray(function (err, data) {
+            if (err) throw err;
+
+            if (data.length > 0) {
+                console.log(JSON.stringify(data))
+                res.end(JSON.stringify(data));
+                db.close();
             }
             else {
-                // After inserting Platinum pick into db, load it to send back to client side;
-                db.collection(req.body.owner).find().toArray(function (err, data) {
-                    if (err) throw err;
-                    if (data.length > 0) {
-                        console.log(JSON.stringify(data))
-                        res.end(JSON.stringify(data));
-                        db.close();
+                var options = {args: [req.body.pick,req.body.owner]};
+                PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
+                    if (err) {
+                        throw err
+                        res.end(JSON.stringify(err))
+                    }
+                    else {
+                        // After inserting Platinum pick into db, load it to send back to client side;
+                        db.collection(req.body.owner).find( { 'Category': 'Supplementory' } ).toArray(function (err, data) {
+                            if (err) throw err;
+                            if (data.length > 0) {
+                                console.log(JSON.stringify(data))
+                                res.end(JSON.stringify(data));
+                                db.close();
+                            }
+                        });
                     }
                 });
             }
@@ -920,15 +932,77 @@ app.post('/PSL/emergingPick', function (req, res) {
         if (err) throw err;
         console.log("Connection Established.")
 
-        var options = {args: [req.body.pick,req.body.owner]};
-        PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
-            if (err) {
+        db.collection(req.body.owner).find( { 'Category': 'Emerging' } ).toArray(function (err, data) {
+            if (err) throw err;
+
+            if (data.length > 0) {
+                console.log(JSON.stringify(data))
+                res.end(JSON.stringify(data));
+                db.close();
+            }
+            else {
+                var options = {args: [req.body.pick,req.body.owner]};
+                PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
+                    if (err) {
+                        throw err
+                        res.end(JSON.stringify(err))
+                    }
+                    else {
+                        // After inserting Platinum pick into db, load it to send back to client side;
+                        db.collection(req.body.owner).find( { 'Category': 'Emerging' } ).toArray(function (err, data) {
+                            if (err) throw err;
+                            if (data.length > 0) {
+                                console.log(JSON.stringify(data))
+                                res.end(JSON.stringify(data));
+                                db.close();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+// ================
+// Admin Section//
+// ================
+
+// updating datasets.
+app.post('/PSL/updateDataset', function (req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        console.log("Connection Established, Downloading Dataset")
+        this.data = req.body.update;     // your JSON
+        console.log(req.body.update)
+        var options = { args: [this.data] };
+        
+        PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\Dataset.py",options, function (err,data) {
+            if (err){
                 throw err
                 res.end(JSON.stringify(err))
             }
-            else {
-                // After inserting Platinum pick into db, load it to send back to client side;
-                db.collection(req.body.owner).find().toArray(function (err, data) {
+            else{
+                console.log(JSON.stringify(data))
+                res.end( data.toString() );
+            }
+        });
+    });
+})
+
+// PSL categories formation
+app.get('/PSL/makePSLCategories', function (req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        console.log("Connection Established, making psl Categories.")
+        
+        PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\Categories.py", function (err,data) {
+            if (err){
+                throw err
+                res.end(JSON.stringify(err))
+            }
+            else{
+                db.collection('psl_player_list').find().toArray(function (err, data) {
                     if (err) throw err;
                     if (data.length > 0) {
                         console.log(JSON.stringify(data))
@@ -939,9 +1013,7 @@ app.post('/PSL/emergingPick', function (req, res) {
             }
         });
     });
-});
-
-
+})
 
 app.post('/PSL/createOwner', function(req, result) {
     
@@ -1022,7 +1094,7 @@ app.get('/PSL/Owners', function(req, res) {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
         console.log('Connection Established.')
-        var query = {}
+        
         db.collection("PSL_Owners").find({}).toArray(function(err, result) {
             if (err) throw err;
 
@@ -1132,6 +1204,27 @@ app.post('/PSL/specificOwner', function(req, res) {
     });
 });
 
+app.put('/PSL/updateOwnerInformation', function (req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        console.log("Connection Established.")
+        console.log("Updating Owner Information : ", req.body._id)
+        
+        var myquery = { _id: new ObjectId(req.body._id) };
+        var newvalues = { name: req.body.form.owner_name, password: req.body.form.password, email:req.body.form.email, teamName:req.body.form.team_name, cnic:req.body.form.cnic };
+        db.collection("PSL_Owners").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          console.log("1 document updated");
+        });
+        db.collection("PSL_Owners").findOne({"_id": new ObjectId(req.body._id)}, function(err, data) {
+            if (err) throw err;
+            res.send({success:true, owner:data,message:'data successfully updated'})
+            
+            db.close();  
+        });
+    });
+});
+
 
 // =====================
 // Choose Best Players //
@@ -1161,29 +1254,19 @@ app.post('/PSL/best_11', function (req, res) {
         db.collection(req.body.name).find({}).toArray(function(err, best_20_players) {
             if(best_20_players.length > 11){
                 
-                db.collection(req.body.name + '_best_11').find({}).toArray(function(err, result) {
-                    if (err) throw err;
-                    
-                    if (result.length > 0){
-                       
-                        console.log(JSON.stringify(result))
-                        res.send({success:true, data: JSON.stringify(result) || []} )
-
+               
+                console.log("Applying Genetic Algorithm")
+                var options = {args: [req.body.pick,req.body.name]};
+                PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
+                    if (err) {
+                        throw err
+                        res.end(JSON.stringify(err))
                     }else{
-                        console.log("Applying Genetic Algorithm")
-                        var options = {args: [req.body.pick,req.body.name]};
-                        PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\DraftingProcess.py", options, function (err, data) {
-                            if (err) {
-                                throw err
-                                res.end(JSON.stringify(err))
-                            }else{
-                                db.collection(req.body.name + '_best_11').find({}).toArray(function(err, result) {
-                                    res.send({success:true, data: JSON.stringify(result)} )
-                                });
-                            }
+                        db.collection(req.body.name + '_best_11').find({}).toArray(function(err, result) {
+                            res.send({success:true, data: JSON.stringify(result)} )
                         });
                     }
-                }); 
+                });
             }
             else{
                 console.log("I am in else condition")
@@ -1193,32 +1276,30 @@ app.post('/PSL/best_11', function (req, res) {
     });
 })
 
-app.put('/PSL/updateOwner', function(req, res) {
+app.post('/PSL/getbest_11', function (req, res) {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        console.log('Connection Established.')
-
-        db.collection("PSL_Owners").update({"_id": new ObjectId(req.body._id)},{ $set: { image: req.body.image} },function(err, result) {
-            if (err) throw err;
-
-            res.end(JSON.stringify(result))
+        console.log("Connection Established.")
+        
+        db.collection(req.body.name + '_best_11').find({}).toArray(function(err, result) {
+            res.send({success:true, data: JSON.stringify(result)} )
             db.close();
-        });
+        }); 
+       
     });
-});
-
-
-
+})
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
 
-app.delete('/deleteCollection',function (err,res) {
+app.post('/PSL/deletebest11',function (req,res) {
+    console.log("Deleting best 11")
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        db.collection("favouritePSLPlayer").drop(function(err, delOK) {
+        db.collection(req.body.ownerName + '_best_11').drop(function(err, delOK) {
             if (err) throw err;
-            if (delOK) res.end("Collection deleted");
+            if (delOK) 
+                res.send({success:true, message:"successfully deleted best 11"} )
             db.close();
         });
     });
@@ -1229,32 +1310,30 @@ app.delete('/deleteCollection',function (err,res) {
 // ================
 
 // Delete a document inside a collection
-app.delete('/PSL/deleteDocument',function(req,res){
+app.post('/PSL/deleteSpecificOwner',function(req,res){
+
+    console.log("Deleting Specific Owner")
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-    console.log(req.body.id);
-    db.collection("Owners").deleteOne({"_id": new ObjectId(req.body.id)}, function(err, obj) {
+
+    db.collection("PSL_Owners").deleteOne({"_id": new ObjectId(req.body.ownerId)}, function(err, obj) {
       if (err) throw err;
-      console.log("1 document deleted");
-      db.close();
+      var options = {args: [req.body.ownerName]};
+      PythonShell.run("G:\\COURSE WORK\\psl_1.1\\Python\\owners.py", options, function (err, data) {
+          if (err) {
+              throw err
+              res.end(JSON.stringify(err))
+          }
+          else{
+            console.log("1 owner deleted");
+            res.send({success:"true",message:"Account successfully deleted"})
+            db.close();
+          }
+        });
+      
     });
 });
 })
-
-//Delete a collection;
-app.delete('/deleteCollection',function (req,res) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
-        var collection = req.body;
-        console.log("Deleting Collection : ",collection)
-    
-        db.collection(req.body).drop(function(err, delOK) {
-            if (err) throw err;
-            if (delOK) res.end("Collection deleted");
-            db.close();
-        });
-    });
-});
 
 app.get('/deleteOwners',function (err,res) {
     MongoClient.connect(url, function(err, db) {

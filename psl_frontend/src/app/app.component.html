@@ -19,7 +19,7 @@
   <a  [routerLinkActive]="['active']" [routerLink]="['aboutUs']" class="item">
     About Us
   </a>
-  <a  [routerLinkActive]="['error']" [routerLink]="['error']" class="item">
+  <a  [routerLinkActive]="['howPSLWorks']" [routerLink]="['howPSLWorks']" class="item">
       How PSL Works
     </a>
   <a [routerLinkActive]="['active']" [routerLink]="['Owner_profile']" class="item" *ngIf="getOwnerTokenData()">
@@ -30,7 +30,7 @@
 
       <!--Searching Player -->
       <div class="ui icon input">
-        <input type="text" style="width:20em;" placeholder="Player Name" [value]="searchValue" #playerName>
+        <input type="text" style="width:20em;" (keyup.enter)="searchPlayer(playerName.value)" placeholder="Player Name" [value]="searchValue" #playerName>
         <i class="search link icon" (click)="searchPlayer(playerName.value)" message = null></i>
         <pre>&ensp;</pre>
       </div>

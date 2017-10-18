@@ -198,6 +198,7 @@ def PSL_dataset():
     delete_collection_from_db('psl_dataset')
     insertData('psl_t20', 'psl_dataset', psl_classified_data)
     print('Data successfully inserted...')
+    
 def Domestic_dataset():
     print("Domestic Dataset")
     domestic_batting_list = []
@@ -210,6 +211,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     cool_t20_batting_data_2015 = cool_t20_batting_data_2015.apply(lambda x: x.str.strip()).replace('', 0)
     cool_t20_batting_data_2015 = check_column_type_domestic(cool_t20_batting_data_2015)
+    cool_t20_batting_data_2015 = removeTeam_Name(cool_t20_batting_data_2015)
     domestic_batting_list.append(cool_t20_batting_data_2015)
 
     """ Bowling """
@@ -217,6 +219,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     cool_t20_bowling_data_2015 = cool_t20_bowling_data_2015.apply(lambda x: x.str.strip()).replace('', 0)
     cool_t20_bowling_data_2015 = check_column_type_domestic(cool_t20_bowling_data_2015)
+    cool_t20_bowling_data_2015 = removeTeam_Name(cool_t20_bowling_data_2015)
     domestic_bowling_list.append(cool_t20_bowling_data_2015)
     print('Successfully grab!')
 
@@ -227,6 +230,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     cool_t20_batting_data_2015_16 = cool_t20_batting_data_2015_16.apply(lambda x: x.str.strip()).replace('', 0)
     cool_t20_batting_data_2015_16 = check_column_type_domestic(cool_t20_batting_data_2015_16)
+    cool_t20_batting_data_2015_16 = removeTeam_Name(cool_t20_batting_data_2015_16)
     domestic_batting_list.append(cool_t20_batting_data_2015_16)
 
     """ Bowling """
@@ -234,6 +238,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     cool_t20_bowling_data_2015_16 = cool_t20_bowling_data_2015_16.apply(lambda x: x.str.strip()).replace('', 0)
     cool_t20_bowling_data_2015_16 = check_column_type_domestic(cool_t20_bowling_data_2015_16)
+    cool_t20_bowling_data_2015_16 = removeTeam_Name(cool_t20_bowling_data_2015_16)
     domestic_bowling_list.append(cool_t20_bowling_data_2015_16)
 
     """ Bank Al-Baraka T20 Cup 2104-15 """
@@ -243,6 +248,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     al_baraka_t20_batting_data_2014_15 = al_baraka_t20_batting_data_2014_15.apply(lambda x: x.str.strip()).replace('', 0)
     al_baraka_t20_batting_data_2014_15 = check_column_type_domestic(al_baraka_t20_batting_data_2014_15)
+    al_baraka_t20_batting_data_2014_15 = removeTeam_Name(al_baraka_t20_batting_data_2014_15)
     domestic_batting_list.append(al_baraka_t20_batting_data_2014_15)
 
     """ Bowling """
@@ -250,6 +256,7 @@ def Domestic_dataset():
     """ String(remove) the new line from ave column"""
     al_baraka_t20_bowling_data_2014_15 = al_baraka_t20_bowling_data_2014_15.apply(lambda x: x.str.strip()).replace('', 0)
     al_baraka_t20_bowling_data_2014_15 = check_column_type_domestic(al_baraka_t20_bowling_data_2014_15)
+    al_baraka_t20_bowling_data_2014_15 = removeTeam_Name(al_baraka_t20_bowling_data_2014_15 )
     domestic_bowling_list.append(al_baraka_t20_bowling_data_2014_15)
     print('Dataset Successfully Downloaded!')
 
@@ -265,9 +272,11 @@ def Domestic_dataset():
     data = merge_classified_data(domestic_data_classification, categories_data)
     print('Assinging Rating')
     rated_data = assigning_rating(data)
+    
+    rated_data = rated_data.rename(columns = {'NAME':'Player', 'PLAYER TYPE':'Player Type', 'RATING': 'Rating'})
     delete_collection_from_db('domestic_dataset')
     insertData('psl_t20', 'domestic_dataset', rated_data)
-    print('Successfully inserted into DataBase!')
+    print(rated_data)
 
 """ PSL DATASET METHODS """
 # Function for Downloading Dataset
@@ -525,6 +534,7 @@ def merge_PSL_batting_bowling_data(psl_batting_data, psl_bowling_data):
     return Batting_dataset
     # END of method
     # END OF SECTION 3
+    
 """ Feature Engineering """
 def classification_of_players(dataset):
     feature1 = dataset['RUNS'].values
@@ -589,19 +599,18 @@ def classification_of_players(dataset):
 
     print('Assigning Categories to players')
     for index,player in dataset.iterrows():
-
-
+        if player['ST'] >= 1 or player['ST'] >= 1.0:
+            dataset.loc[index,'PLAYER TYPE'] = 'Wicket keeper Batsman'
+            print(player[['PLAYER', 'ST']])
+        
         if player['BATTING PERC'] >= 66.0 and player['BOWLING PERC'] >= 66.0:
             dataset.loc[index,'PLAYER TYPE'] = 'Allrounder'
 
-        if player['ST'] > 0.0 or player['ST'] > 0:
-            if player['PLAYER TYPE'] != 'Wicket keeper Batsman':
-                dataset.loc[index,'PLAYER TYPE'] = 'Wicket keeper Batsman'
 
-        if player['BOWLING INNS'] == 0.0 or player['BOWLING INNS'] == 0:
+        if player['BOWLING INNS'] == 0.0 and player['ST'] == 0:
             dataset.loc[index,'PLAYER TYPE'] = 'Batsman'
 
-        if player['BOWLING PERC'] >= 90.0 or player['PLAYER TYPE'] == 'Allrounder':
+        if player['BOWLING PERC'] >= 85.0:
             if player['BATTING PERC'] < 20.0:
                 dataset.loc[index,'PLAYER TYPE'] = 'Bowler'
 
@@ -610,7 +619,7 @@ def classification_of_players(dataset):
             dataset.loc[index,'PLAYER TYPE'] = 'Bowler'
 
         if player['PLAYER TYPE'] == 'Batting Allrounder' or player['PLAYER TYPE'] == 'Allrounder':
-            if player['BATTING PERC'] >= 90.0 and player['BOWLING PERC'] <=20.0:
+            if player['BATTING PERC'] >= 85.0 and player['BOWLING PERC'] <=20.0:
                 dataset.loc[index,'PLAYER TYPE'] = 'Batsman'
 
         if player['PLAYER TYPE'] == 'Bowler' or player['PLAYER TYPE'] == 'Bowling Allrounder' or player['PLAYER TYPE'] == 'Allrounder':
@@ -649,7 +658,7 @@ def classification_of_players(dataset):
             dataset.loc[index,'PBW'] = ((player['ECON'] * 0.4) + (player['BOWLING SR'] * 0.3) + (player['4WI'] * 0.2) + (player['5WI'] * 0.1))*0.8
             dataset.loc[index, 'PEX'] = player['INNS'] + player['BOWLING INNS']
 
-    print('Now Assigning Rating on basis of PBT, PBW and PEX')
+    print('Now Assigning Rating on basis of PBT, PBW and PEX')        
     for index,player in dataset.iterrows():
         if player['PLAYER TYPE'] == 'Batsman' or player['PLAYER TYPE'] == 'Wicket keeper Batsman':
             dataset.loc[index, 'RATING'] = (player['PBT']*0.8) + (player['PEX']*0.2)
@@ -661,11 +670,11 @@ def classification_of_players(dataset):
             dataset.loc[index, 'RATING'] = (player['PBT']*0.6) + (player['PBW']*0.2) + (player['PEX']*0.2)
         elif player['PLAYER TYPE'] == 'Bowling allrounder' or player['PLAYER TYPE'] == 'Bowling Allrounder':
             dataset.loc[index, 'RATING'] = (player['PBT']*0.2) + (player['PBW']*0.6) + (player['PEX']*0.2)
-
-
+            
+    
     return dataset
-""" END OF SECTION 4 """
 
+    """ END OF SECTION 4 """
 
 """ Domestic Dataset Method """
 def add_psl_Dataset_in_t20_dataset(t20_dataset, psl_dataset):
@@ -1150,6 +1159,7 @@ def insertData(dbName,collectionName,data):
 def delete_DB(name):
     client = MongoClient()
     client.drop_database(name)
+
 def classify_players(dataset):
     #feature selection;
     feature1 = dataset['Runs'].values
@@ -1165,6 +1175,7 @@ def classify_players(dataset):
     feature11 = dataset['Econ']
     feature12 = dataset['Overs']
     feature13 = dataset['Bowling_Avg']
+
     #preprocessing
     X = np.column_stack((feature1,feature2,feature3,feature4,feature5,feature6,feature7,feature8
                          ,feature9,feature10,feature11,feature12,feature13))
@@ -1198,10 +1209,12 @@ def classify_players(dataset):
             if player[0] == row[0]:
                 dataset.loc[index,'Player Type'] = 'Batting Allrounder'
 
-    for index, player in dataset.iterrows():
-        for indexx, row in cluster5_playerList.iterrows():
-            if player[0] == row[0]:
-                dataset.loc[index,'Player Type'] = 'Wicket keeper Batsman'
+#     for index, player in dataset.iterrows():
+#         for indexx, row in cluster5_playerList.iterrows():
+#             if player[0] == row[0]:
+#                 dataset.loc[index,'Player Type'] = 'Wicket keeper Batsman'
+#                 print('/////////////////////////////////////')
+#                 print('Cluster keeper   ',row[0])
 
     print("Changing dtypes of the columns to appropriete ones")
     dataset = check_column_type(dataset)
@@ -1214,7 +1227,9 @@ def classify_players(dataset):
 
 
     for index,player in dataset.iterrows():
-        if player[31] > 66.0 and player[32] >66.0:
+        if player['St'] >= 1:
+            dataset.loc[index,'Player Type'] = 'Wicket keeper Batsman'
+        elif player[31] > 66.0 and player[32] >66.0:
             dataset.loc[index,'Player Type'] = 'Allrounder'
         elif player[15] == 0.0 and player[30] != 'Wicket keeper Batsman':
             dataset.loc[index,'Player Type'] = 'Batsman'
@@ -1226,6 +1241,9 @@ def classify_players(dataset):
         elif player[30] == 'Bowling Allrounder':
             if player[31] >= 66.0 and player[32] < 66.0:
                 dataset.loc[index,'Player Type'] = 'Batting Allrounder'
+        elif player['St'] > 0 or player['St'] > 0.0:
+            dataset.loc[index,'Player Type'] = 'Wicket keeper Batsman'
+            
 
     print("Assigning Rating Points.")
     for index,player in dataset.iterrows():
@@ -1233,28 +1251,28 @@ def classify_players(dataset):
             dataset.loc[index,'PBT'] = (player[9] * 0.4) + (player[7] * 0.3) + (player[11] * 0.2) + (player[10] * 0.1)
             dataset.loc[index,'PBW'] = 0.0
             dataset.loc[index,'PEX'] = player['Inns']
-
+            
         elif player[30] == 'Bowler':
             dataset.loc[index,'PBT'] = 0.0
             dataset.loc[index,'PBW'] = (player[22] * 0.4) + (player[23] * 0.3) + (player[24] * 0.2) + (player[25] * 0.1)
             dataset.loc[index,'PEX'] = player['Bowling_Inns']
-
+            
         elif player[30] == 'Allrounder':
             dataset.loc[index,'PBT'] = ((player[9] * 0.4) + (player[7] * 0.3) + (player[11] * 0.2) + (player[10] * 0.1))*0.5
             dataset.loc[index,'PBW'] = ((player[22] * 0.4) + (player[23] * 0.3) + (player[24] * 0.2) + (player[25] * 0.1))*0.5
             dataset.loc[index,'PEX'] = player['Inns'] + player['Bowling_Inns']
-
+            
         elif player[30] == 'Batting Allrounder':
             dataset.loc[index,'PBT'] = ((player[9] * 0.4) + (player[7] * 0.3) + (player[11] * 0.2) + (player[10] * 0.1))*0.8
             dataset.loc[index,'PBW'] = ((player[22] * 0.4) + (player[23] * 0.3) + (player[24] * 0.2) + (player[25] * 0.1))*0.2
             dataset.loc[index,'PEX'] = player['Inns'] + player['Bowling_Inns']
-
+            
         elif player[30] == 'Bowling Allrounder':
             dataset.loc[index,'PBT'] = ((player[9] * 0.4) + (player[7] * 0.3) + (player[11] * 0.2) + (player[10] * 0.1))*0.2
             dataset.loc[index,'PBW'] = ((player[22] * 0.4) + (player[23] * 0.3) + (player[24] * 0.2) + (player[25] * 0.1))*0.8
             dataset.loc[index,'PEX'] = player['Inns'] + player['Bowling_Inns']
-
-
+            
+            
     for index,player in dataset.iterrows():
         if player[30] == 'Batsman' or player[30] == 'Wicket keeper Batsman':
             dataset.loc[index,'Rating'] = (player['PBT'] * 0.8) + (player['PEX'] * 0.2)
@@ -1410,6 +1428,14 @@ def is_Collection_Exits(collectionName):
         return True;
     return False;
 
+def removeTeam_Name(domestic_dataset):
+    for index,player in domestic_dataset.iterrows():
+        fullname = player['NAME']
+        teamName = fullname.split(" ")[-1]
+        name_withoutTeam = ' '.join(fullname.split(' ')[:-1])
+#         t20_dataset.loc[index,'TEAM'] = countryName
+        domestic_dataset.loc[index,'NAME'] = name_withoutTeam
+    return domestic_dataset
 #Choosing the data set to download based on the instruction from node server;
 print("I am here in python")
 sys.stdout.flush()

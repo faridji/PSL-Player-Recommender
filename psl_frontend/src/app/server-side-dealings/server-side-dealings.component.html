@@ -1,13 +1,13 @@
-
+
 <div class="ui grid">
     <div class="three wide column" style="margin-left:1em; margin-top:10em">
         
         <!--Card No.1 for sign up and login -->
         <div class="card" style="background-color: #F1F9FF;" *ngIf="!getTokenData()">
             <div class="content" style="margin:0.5em">
-                <div class="header" id="heading">Owner Registration</div>
-                <hr> 
-            </div>
+                <div class="header" style="text-align:center"><b>Owner Registration</b></div>
+                <hr> 
+            </div>
             <div>   
                 <div class="ui bottom attached button" id="signUp" (click)="toggle_SignUpVisibility()">
                     Sign Up       
@@ -46,8 +46,6 @@
                         <img class="ui avatar image" src="/assets/quetta_gladiators.png" style="cursor:pointer;" (click)="pslTeam('queta Gladiators')"> Queta Gladiators
                         <img class="ui avatar image" src="/assets/lahore_qalandars.png" style="cursor:pointer;" style="cursor:pointer;" (click)="pslTeam('lahore Qalandars')"> Lahore Qalandars
                         <img class="ui avatar image" src="/assets/karachi_kings.png" style="cursor:pointer;" (click)="pslTeam('karachi Kings')"> karachi kings
-                        <br>
-                        <img class="ui avatar image" src="/assets/multan_sultan.jpg" style="cursor:pointer;" (click)="pslTeam('multan Sultan')"> Multan Sultans
                         <br>
                         <img class="ui avatar image" src="/assets/islamabad_united.png" style="cursor:pointer;" (click)="pslTeam('islamabad United')"> Islamabad United
                     </ul>
@@ -107,15 +105,15 @@
             <table class="ui selectable inverted table">
                 <tr style="height:3em; background-color:#195D10">
                     <th>#</th>
-                    <th class="ribben label">Name</th>
-                    <th>Team</th>
+                    <th>Name</th>
                     <th>Player Type</th>
+                    <th>Rating</th>
                 </tr>
                 <tr *ngFor="let player of domesticPlayers | paginate: { itemsPerPage: 10, currentPage: p } let i = index" >
                     <td>{{i + 1}}</td>
-                    <td>{{player.NAME}}</td>
-                    <td>{{player.TEAM}}</td>
-                    <td>{{player['PLAYER TYPE']}}</td> 
+                    <td>{{player.Player}}</td>
+                    <td>{{player['Player Type']}}</td> 
+                    <td>{{player.RATING}}</td>
                 </tr>
             </table>
             <pagination-controls (pageChange)="p = $event"></pagination-controls>
@@ -377,6 +375,7 @@
 
         
         <div *ngIf="!showBestPlaying11" class="ui negative message" style="margin:2em 15em 0.5em 15em; text-align:center;font-size:20px;">
+            <i class="close icon" (click)="closeMessageBox()"></i>
             Please first select more than 11 players from Drafting Process
         </div>
         <div class="ui attached segment" *ngIf="showBestPlaying11 && best_20?.length > 0"> 
@@ -428,10 +427,10 @@
 
 <!-- Normal Users can't see the drafting process -->
 <div class="three wide column" style="margin: 5em 35em 0em 35em" *ngIf="!getTokenData()">
-    <h3 class="ui header">Please Log In to access drafting process</h3>
+    <h3 class="ui header" style="text-align:center">Please Log In to access drafting process</h3>
     <div class="card" style="background-color: #F1F9FF;" >
         <div class="content" style="margin:0.5em">
-            <div class="header" id="heading">Owner Registration</div>
+            <div class="header" style="text-align:center"><b>Owner Registration</b></div>
             <hr>
         </div>
         <div>   

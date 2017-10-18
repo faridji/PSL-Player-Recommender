@@ -63,7 +63,6 @@ export class SignUpComponent implements OnInit {
     this.success_message = ""
     if(value['owner_name']){
       
-      
         this.http.post('http://127.0.0.1:8081/PSL/createOwner',value)
         .subscribe((res:Response)=>{
           this.success = res.json().success;

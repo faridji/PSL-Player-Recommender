@@ -18,7 +18,8 @@ def delete_DB(name):
     client = MongoClient()
     client.drop_database(name)
     print(name + " database deleted")
-def delete_collection_from_db(collectionName):
+
+def delete_collection_from_db(collectionName):
     client = MongoClient()
     db = client['psl_t20']
     db.drop_collection(collectionName)
@@ -143,6 +144,26 @@ def makeSilverCategory(gold_Category_Players, sorted_data):
 #     print("Successfully Inserted supplementory Category into Database.")
 #     return supplementory_category_players;
 
+def makeEmergingCategory(players):
+    emerging_category_players = []
+    domestic_dataset = loadingData('psl_t20','domestic_dataset')
+    for index,player in players.iterrows():
+        for domestic_player_index, domestic_player in domestic_dataset.iterrows():
+            
+            if player['Player'] == domestic_player['Player']:
+                emerging_category_players.append(domestic_dataset.loc[domestic_player_index])
+    
+    emerging_category_players = pd.DataFrame(emerging_category_players)
+    emerging_category_players = emerging_category_players.groupby('Player Type').apply(pd.DataFrame.sort_values,'RATING',ascending=[False])
+    
+    # This will drop the column created after grouping the data
+    emerging_category_players = emerging_category_players.reset_index(drop=True)
+    delete_collection_from_db('Emerging')
+    insertData('psl_t20','Emerging',emerging_category_players)
+    print("Successfully Inserted emerging Category into Database.")
+    return emerging_category_players;
+
+
 def process_psl_PlayerList():
     psl_list = pd.read_csv("G:\\COURSE WORK\\psl\\Python\\psl_player_list.csv",index_col=False)
     replace_list = []
@@ -202,6 +223,7 @@ def process_psl_PlayerList():
 
     # Extract the matched international Players and put the remaining players into domestic list
     domestic_list = psl_list[~psl_list.Player.isin(matched_international_player.Player)]
+    domestic_list.reset_index(drop=True,inplace=True)
 
     # Getting t20 dataset from database
     print("Loading T20 International Dataset")
@@ -214,7 +236,7 @@ def process_psl_PlayerList():
         insertData('psl_t20','psl_player_list',data)
 
 
-        sorted_data = data.groupby('Player Type').apply(pd.DataFrame.sort,'Overall_rating',ascending=[False])
+        sorted_data = data.groupby('Player Type').apply(pd.DataFrame.sort_values,'Overall_rating',ascending=[False])
         # This will drop the column created after grouping the data
         sorted_data = sorted_data.reset_index(drop=True)
 
@@ -227,11 +249,14 @@ def process_psl_PlayerList():
         print("Creating Gold Category.")
         gold_Category_Players = makeGoldCategory(diamond_Category_Players,sorted_data)
         sorted_data = reducing_pslPlayers_list(gold_Category_Players,sorted_data)
-        # print("Creating Silver Category.")
-        # silver_Category_Players = makeSilverCategory(gold_Category_Players,sorted_data)
-        # sorted_data = reducing_pslPlayers_list(silver_Category_Players,sorted_data)
+        print("Creating Silver Category.")
+        silver_Category_Players = makeSilverCategory(gold_Category_Players,sorted_data)
+        sorted_data = reducing_pslPlayers_list(silver_Category_Players,sorted_data)
         # print("Creating Supplementory Category.")
         # supplementory_Category_Players = makeSupplementoryCategory(silver_Category_Players,sorted_data)
+
+        print("Creating Emerging Category.")
+        emerging_Category_Players = makeEmergingCategory(domestic_list)
     else:
         print("Calculating overall Rating")
         for index_of_t20player, t20_player in t20_dataset.iterrows():
@@ -249,7 +274,7 @@ def process_psl_PlayerList():
         delete_collection_from_db('psl_player_list')
         insertData('psl_t20','psl_player_list',data)
         print("Successfully inserted psl_player_list in Database.")
-        sorted_data = data.groupby('Player_Type').apply(pd.DataFrame.sort,'Overall_rating',ascending=[False])
+        sorted_data = data.groupby('Player_Type').apply(pd.DataFrame.sort_values,'Overall_rating',ascending=[False])
         # This will drop the column created after grouping the data
         sorted_data = sorted_data.reset_index(drop=True)
 
@@ -262,9 +287,9 @@ def process_psl_PlayerList():
         print("Creating Gold Category.")
         gold_Category_Players = makeGoldCategory(diamond_Category_Players,sorted_data)
         sorted_data = reducing_pslPlayers_list(gold_Category_Players,sorted_data)
-        # print("Creating Silver Category.")
-        # silver_Category_Players = makeSilverCategory(gold_Category_Players,sorted_data)
-        # sorted_data = reducing_pslPlayers_list(silver_Category_Players,sorted_data)
+        print("Creating Silver Category.")
+        silver_Category_Players = makeSilverCategory(gold_Category_Players,sorted_data)
+        sorted_data = reducing_pslPlayers_list(silver_Category_Players,sorted_data)
         # print("Creating Supplementory Category.")
         # supplementory_Category_Players = makeSupplementoryCategory(silver_Category_Players,sorted_data)
 

@@ -1,5 +1,5 @@
 import { Component,OnInit} from '@angular/core';
-import { Router,NavigationEnd  } from '@angular/router';
+import { Router,NavigationEnd,ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +11,9 @@ export class AppComponent implements OnInit{
   searchResult : String;
   searchValue:string = '';
   dialogVisibility : boolean;
+  message : String = ""
 
-  constructor(private router: Router) { 
+  constructor(private router: Router,private route: ActivatedRoute) { 
     this.dialogVisibility = false;
   }
 
@@ -35,6 +36,8 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
+
+
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
           return;

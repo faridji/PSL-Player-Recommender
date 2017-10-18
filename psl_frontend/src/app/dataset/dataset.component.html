@@ -1,4 +1,4 @@
-<br><br>
+<br><br><br><br>
 <h1 class="ui header" style="text-align:center">
   Dataset Section
 </h1>
@@ -22,34 +22,114 @@
 <br>
 
 
-<div class="ui segment" *ngIf="data">
-  <h1 class="ui header" style="text-align:center">
-      {{datasetHeading}}
-  </h1>
-  <table class="ui selectable inverted table" >
-    <tr style="height:3em; background-color:green">
-        <th>#</th>
-        <th>Player</th>
-        <th>Country</th>
-        <th>Runs</th>
-        <th>Wickets</th>
-        <th>Player Type</th>
-        <th>T20 Rating</th>
-        <th>PSL Rating</th>
-        <th>Overall Rating</th>
-    </tr>
-    <tr *ngFor="let player of data | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
-        <td>{{i + 1}}</td>
-        <td>{{player.Player}}</td>
-        <td>{{player.Country}}</td>
-        <td>{{player.Runs}}</td>
-        <td>{{player.Wickets}}</td>
-        <td>{{player['Player Type']}}</td>
-        <td>{{player.Rating}}</td>
-        <td>{{player.psl_rating}}</td>
-        <td>{{player.Overall_rating}}</td>
-    </tr>
+<div class="ui segment" *ngIf="loading == false">
+    <h1 class="ui header" style="text-align:center">
+        {{datasetHeading}}
+    </h1>
+
+  <div *ngIf="t20Players.length > 0">
+    
+      <table class="ui selectable inverted table" >
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Country</th>
+              <th>Runs</th>
+              <th>Wickets</th>
+              <th>Player Type</th>
+              <th>T20 Rating</th>
+              <th>PSL Rating</th>
+              <th>Overall Rating</th>
+          </tr>
+          <tr *ngFor="let player of t20Players | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{player.Player}}</td>
+              <td>{{player.Country}}</td>
+              <td>{{player.Runs}}</td>
+              <td>{{player.Wickets}}</td>
+              <td>{{player['Player Type']}}</td>
+              <td>{{player.Rating}}</td>
+              <td>{{player.psl_rating}}</td>
+              <td>{{player.Overall_rating}}</td>
+          </tr>
+        
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
   
-  </table>
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <div *ngIf="pslPlayers.length > 0">
+      <table class="ui selectable inverted table" >
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Runs</th>
+              <th>Wickets</th>
+              <th>Player Type</th>
+              <th>PSL Rating</th>
+          </tr>
+          <tr *ngFor="let player of pslPlayers | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{player.PLAYER}}</td>
+              <td>{{player.RUNS}}</td>
+              <td>{{player.WKTS}}</td>
+              <td>{{player['PLAYER TYPE']}}</td>
+              <td>{{player.RATING}}</td>
+          </tr>
+        
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+  <div *ngIf="domesticPlayers.length > 0">
+      <table class="ui selectable inverted table" >
+          <tr style="height:3em; background-color:green">
+              <th>#</th>
+              <th>Player</th>
+              <th>Runs</th>
+              <th>Wickets</th>
+              <th>Player Type</th>
+              <th>Domestic Rating</th>
+          </tr>
+          <tr *ngFor="let player of domesticPlayers | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{player.Player}}</td>
+              <td>{{player.RUNS}}</td>
+              <td>{{player.WKTS}}</td>
+              <td>{{player['Player Type']}}</td>
+              <td>{{player.RATING}}</td>
+          </tr>
+        
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+  <div *ngIf="pslPlayersList.length > 0">
+        <table class="ui selectable inverted table" >
+            <tr style="height:3em; background-color:green">
+                <th>#</th>
+                <th>Player</th>
+                <th>Country</th>
+                <th>Runs</th>
+                <th>Wickets</th>
+                <th>Player Type</th>
+                <th>T20 Rating</th>
+                <th>PSL Rating</th>
+                <th>Overall Rating</th>
+            </tr>
+            <tr *ngFor="let player of pslPlayersList | paginate: { itemsPerPage: 10, currentPage: p } let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{player.Player}}</td>
+                <td>{{player.Country}}</td>
+                <td>{{player.Runs}}</td>
+                <td>{{player.Wickets}}</td>
+                <td>{{player['Player Type']}}</td>
+                <td>{{player.Rating}}</td>
+                <td>{{player.psl_rating}}</td>
+                <td>{{player.Overall_rating}}</td>
+            </tr>
+          
+          </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+
 </div>

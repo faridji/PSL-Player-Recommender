@@ -37,7 +37,8 @@ const routes: Routes = [ { path: '', redirectTo: 'home', pathMatch: 'full' },
 { path: 'Owner_profile',component:OwnerProfileComponent},
 { path: 'player_profile',component:PlayerProfileComponent},
 { path: 'login',component:LoginComponent},
-{ path: 'error',component:ErrorComponent}
+{ path: 'error',component:ErrorComponent},
+{ path: 'howPSLWorks',component:HowPSLWorksComponent}
 ];
 
 @NgModule({

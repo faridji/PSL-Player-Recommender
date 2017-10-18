@@ -18,7 +18,6 @@ export class SignOutComponent implements OnInit {
     
     localStorage.removeItem('currentUserToken');
     this.router.navigateByUrl('/home')
-    location.reload(); 
     
   }
 
