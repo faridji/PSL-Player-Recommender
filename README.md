@@ -1,6 +1,6 @@
 # PSL-Player-Recommender
 ## Abstract
-This is an implemenation of Pakistan Super League which is held every year in Pakistan. In this project we automating the formation of
+This is an implemenation of Pakistan Super League which is held every year in Pakistan. In this project we are automating the formation of
 different categories of psl (Platinum, Diamond, Gold, Silver, Emerging). Then we recommends different players for owners in the drafting
 process. At the end of drafting, each owner of 6 different teams get 20 players team. Our system then give the best playing 11 to each
 owner. It can alse be used by PCB to form the above 5 different categories.
@@ -21,14 +21,14 @@ Using genetic algorithm we recommends best playing 11 to each owner from the 20 
 - 4 (bowlers + bowling allrounders)
 - 6 (batsman + batting allrounders + all rounders)
 
-Our applications also provides owners to maintain their complete in form of a dashboard. It also provides survay facility to users to vote for their best players and team of PSL.
+Our applications also provides owners to maintain their complete profile in form of a dashboard. It also provides survay facility to users to vote for their best players and team of PSL.
 
 ## Features
 ### PSL Categories Formation
 Our system places players into different PSL categories based on their performance. We takes their performance from following dataset.
 - T20 International Data
 - Previos PSL Editions (2016,2017)
-- Pakistanis Domestic Data.
+- Domestic Data (for pakistani players only).
 
 We use different statistical formulas to rank player. 
 ### Best 20 Player
@@ -61,13 +61,13 @@ Our system also presents squad of the six PSL teams to user. Following are the d
 - Lahore Qalandars
 - Karachi Kings
 - Islamabad United
-- Multan Sultan
+- Multan Sultan (newly added)
 
 ## Tools and Technologies
 ### Front end Technologies
 - Angular 2
 - Semantic UI
-- Ace Editor
+- Visual Studio Code editor
 ### Back end Technologies
 - Node.js
 - Express JS (Node.js Framework)
